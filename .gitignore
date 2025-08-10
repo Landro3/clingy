@@ -32,3 +32,5 @@ go.work.sum
 # .vscode/
 
 C4 Diagrams/
+clingy-client/clingy-client
+
