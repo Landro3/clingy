@@ -1,0 +1,27 @@
+clingy/
+├── main.go                   # Entry point, program setup
+├── app/
+│   ├── model.go             # Root app model with page state
+│   ├── update.go            # Root update logic, page routing
+│   └── view.go              # Root view, renders current page
+├── pages/
+│   ├── chat/
+│   │   ├── model.go         # Chat page model
+│   │   ├── update.go        # Chat update logic
+│   │   ├── view.go          # Chat view assembly
+│   │   └── components.go    # Chat components
+│   ├── add-user/
+│   │   ├── model.go         # Add user form model
+│   │   ├── update.go        # Form handling
+│   │   ├── view.go          # Form layout
+│   │   └── components.go    # Form inputs
+│   └── connect/
+│       ├── model.go         # Server connection model
+│       ├── update.go        # Connection logic
+│       ├── view.go          # Connection form
+│       └── components.go    # Server input fields
+├── shared/
+│   ├── styles.go            # Global lipgloss styles
+│   ├── messages.go          # Custom message types
+│   └── components.go        # Shared UI components
+└── go.mod
