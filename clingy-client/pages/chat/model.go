@@ -13,12 +13,20 @@ type ChatMessage struct {
 	IsOwn   bool
 }
 
+type FocusedElement int
+
+const (
+	ChatInput FocusedElement = iota
+	Contact
+)
+
 type Model struct {
 	content   string
 	ready     bool
 	viewport  viewport.Model
 	messages  []ChatMessage
 	chatInput textinput.Model
+	focus     FocusedElement
 }
 
 func InitialModel() Model {
