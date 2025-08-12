@@ -2,8 +2,32 @@ package chat
 
 import (
 	"fmt"
-	"github.com/charmbracelet/lipgloss"
 	"strings"
+
+	"github.com/charmbracelet/lipgloss"
+)
+
+const (
+	// Background Colors
+	BgDark      = "#1a1b26"
+	Bg          = "#24283b"
+	BgHighlight = "#414868"
+	Comment     = "#565f89"
+
+	// Foreground Colors
+	Fg       = "#c0caf5"
+	FgDark   = "#a9b1d6"
+	FgGutter = "#9aa5ce"
+
+	// Accent Colors
+	Blue   = "#7aa2f7"
+	Purple = "#bb9af7"
+	Cyan   = "#7dcfff"
+	Teal   = "#73daca"
+	Green  = "#9ece6a"
+	Yellow = "#e0af68"
+	Red    = "#f7768e"
+	Orange = "#ff9e64"
 )
 
 var (
@@ -21,14 +45,21 @@ var (
 
 	leftChatStyle = lipgloss.NewStyle().
 			Border(lipgloss.NormalBorder(), false, false, false, true).
-			BorderForeground(lipgloss.Color("#7dcfff")).
+			BorderForeground(lipgloss.Color(Purple)).
 			Padding(0, 1)
 
 	rightChatStyle = lipgloss.NewStyle().
 			Border(lipgloss.NormalBorder(), false, true, false, false).
-			BorderForeground(lipgloss.Color("#bb9af7")).
+			BorderForeground(lipgloss.Color(Cyan)).
 			Align(lipgloss.Right).
 			Padding(0, 1)
+
+	chatInputStyle = lipgloss.NewStyle().
+			Border(lipgloss.RoundedBorder()).
+			Padding(0, 1)
+
+	contactButtonStyle = lipgloss.NewStyle().
+				Border(lipgloss.RoundedBorder())
 )
 
 func (m Model) headerView() string {
@@ -44,12 +75,25 @@ func (m Model) footerView() string {
 }
 
 func (m Model) chatInputView() string {
-	style := lipgloss.NewStyle().
-		Border(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("62")).
-		Padding(0, 1)
+	if m.focus != ChatInput {
+		chatInputStyle = chatInputStyle.BorderForeground(lipgloss.Color(Fg))
+	} else {
+		chatInputStyle = chatInputStyle.BorderForeground(lipgloss.Color(Purple))
+	}
 
-	return lipgloss.PlaceHorizontal(m.viewport.Width, lipgloss.Center, style.Render(m.chatInput.View()))
+	if m.focus != Contact {
+		contactButtonStyle = contactButtonStyle.BorderForeground(lipgloss.Color(Fg))
+	} else {
+		contactButtonStyle = contactButtonStyle.BorderForeground(lipgloss.Color(Purple))
+	}
+
+	input := chatInputStyle.Render(m.chatInput.View())
+
+	return lipgloss.PlaceHorizontal(
+		m.viewport.Width,
+		lipgloss.Center,
+		lipgloss.JoinHorizontal(lipgloss.Center, input, contactButtonStyle.Render("Contact")),
+	)
 }
 
 func (m Model) formatMessages() string {

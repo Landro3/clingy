@@ -2,28 +2,28 @@ package app
 
 import (
 	"clingy-client/pages/chat"
+	"clingy-client/pages/contact"
+	"clingy-client/shared"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type PageType int
-
-const (
-	ChatPage PageType = iota
-	ContactPage
-	ConnectPage
-)
-
 type Model struct {
-	currentPage PageType
-	chatModel   chat.Model
+	currentPage  shared.PageType
+	chatModel    chat.Model
+	contactModel contact.Model
+	windowHeight int
+	windowWidth  int
 }
 
 func (m Model) Init() tea.Cmd { return nil }
 
 func InitialModel() Model {
 	return Model{
-		currentPage: ChatPage,
-		chatModel:   chat.InitialModel(),
+		currentPage:  shared.ChatPage,
+		chatModel:    chat.InitialModel(),
+		contactModel: contact.InitialModel(),
+		windowHeight: 0,
+		windowWidth:  0,
 	}
 }
