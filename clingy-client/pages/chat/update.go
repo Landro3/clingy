@@ -33,7 +33,6 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			case ChatInput:
 				util.Log("...sending message")
 			case Contact:
-				util.Log("...navigating")
 				navigateCmd := func() tea.Msg {
 					return shared.NavigateMsg{Page: shared.ContactPage}
 				}
