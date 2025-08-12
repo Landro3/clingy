@@ -40,6 +40,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			}
 		}
 
+		// TODO: reconcile this with viewport update below
 		m.chatInput, cmd = m.chatInput.Update(msg)
 		cmds = append(cmds, cmd)
 	case tea.WindowSizeMsg:
