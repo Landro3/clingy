@@ -24,13 +24,15 @@ var (
 	leftChatStyle = lipgloss.NewStyle().
 			Border(lipgloss.NormalBorder(), false, false, false, true).
 			BorderForeground(lipgloss.Color(shared.Purple)).
-			Padding(0, 1)
+			Padding(0, 1).
+			Margin(0, 0, 1)
 
 	rightChatStyle = lipgloss.NewStyle().
 			Border(lipgloss.NormalBorder(), false, true, false, false).
 			BorderForeground(lipgloss.Color(shared.Cyan)).
 			Align(lipgloss.Right).
-			Padding(0, 1)
+			Padding(0, 1).
+			Margin(0, 0, 1)
 
 	chatInputStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).

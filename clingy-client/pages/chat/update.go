@@ -3,6 +3,7 @@ package chat
 import (
 	"clingy-client/shared"
 	"clingy-client/util"
+	"fmt"
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
@@ -32,6 +33,11 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			switch m.focus {
 			case ChatInput:
 				util.Log("...sending message")
+				util.Log(fmt.Sprintf("messages length: %d", len(m.messages)))
+				m.messages = append(m.messages, ChatMessage{Author: "Andrew", Content: m.chatInput.Value(), Time: "now", IsOwn: true})
+				m.setChatContent()
+				m.chatInput.SetValue("")
+				m.viewport.GotoBottom()
 			case Contact:
 				cmds = append(cmds, shared.NavigateCmd(shared.ContactPage))
 			}
