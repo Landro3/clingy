@@ -41,8 +41,8 @@ func usernameInputModel() textinput.Model {
 	usernameInput.Placeholder = "Username"
 	usernameInput.PlaceholderStyle = lipgloss.NewStyle().Foreground(lipgloss.Color(shared.Comment))
 	usernameInput.CharLimit = 32
-	usernameInput.Width = 30 // Add this to fix placeholder display
-	usernameInput.Focus()    // Add this to focus the input
+	usernameInput.Width = 30
+	usernameInput.Focus()
 
 	return usernameInput
 }
