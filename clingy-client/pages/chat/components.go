@@ -1,33 +1,11 @@
 package chat
 
 import (
+	"clingy-client/shared"
 	"fmt"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-)
-
-const (
-	// Background Colors
-	BgDark      = "#1a1b26"
-	Bg          = "#24283b"
-	BgHighlight = "#414868"
-	Comment     = "#565f89"
-
-	// Foreground Colors
-	Fg       = "#c0caf5"
-	FgDark   = "#a9b1d6"
-	FgGutter = "#9aa5ce"
-
-	// Accent Colors
-	Blue   = "#7aa2f7"
-	Purple = "#bb9af7"
-	Cyan   = "#7dcfff"
-	Teal   = "#73daca"
-	Green  = "#9ece6a"
-	Yellow = "#e0af68"
-	Red    = "#f7768e"
-	Orange = "#ff9e64"
 )
 
 var (
@@ -45,12 +23,12 @@ var (
 
 	leftChatStyle = lipgloss.NewStyle().
 			Border(lipgloss.NormalBorder(), false, false, false, true).
-			BorderForeground(lipgloss.Color(Purple)).
+			BorderForeground(lipgloss.Color(shared.Purple)).
 			Padding(0, 1)
 
 	rightChatStyle = lipgloss.NewStyle().
 			Border(lipgloss.NormalBorder(), false, true, false, false).
-			BorderForeground(lipgloss.Color(Cyan)).
+			BorderForeground(lipgloss.Color(shared.Cyan)).
 			Align(lipgloss.Right).
 			Padding(0, 1)
 
@@ -76,15 +54,15 @@ func (m Model) footerView() string {
 
 func (m Model) chatInputView() string {
 	if m.focus != ChatInput {
-		chatInputStyle = chatInputStyle.BorderForeground(lipgloss.Color(Fg))
+		chatInputStyle = chatInputStyle.BorderForeground(lipgloss.Color(shared.Fg))
 	} else {
-		chatInputStyle = chatInputStyle.BorderForeground(lipgloss.Color(Purple))
+		chatInputStyle = chatInputStyle.BorderForeground(lipgloss.Color(shared.Purple))
 	}
 
 	if m.focus != Contact {
-		contactButtonStyle = contactButtonStyle.BorderForeground(lipgloss.Color(Fg))
+		contactButtonStyle = contactButtonStyle.BorderForeground(lipgloss.Color(shared.Fg))
 	} else {
-		contactButtonStyle = contactButtonStyle.BorderForeground(lipgloss.Color(Purple))
+		contactButtonStyle = contactButtonStyle.BorderForeground(lipgloss.Color(shared.Purple))
 	}
 
 	input := chatInputStyle.Render(m.chatInput.View())

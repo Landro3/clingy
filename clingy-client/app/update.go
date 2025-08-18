@@ -7,32 +7,25 @@ import (
 )
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmd tea.Cmd
-
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.windowHeight = msg.Height
 		m.windowWidth = msg.Width
-		switch m.currentPage {
-		case shared.ChatPage:
-			m.chatModel, _ = m.chatModel.Update(msg)
-		case shared.ContactPage:
-			m.contactModel, _ = m.contactModel.Update(msg)
-		}
 	case tea.KeyMsg:
-		if k := msg.String(); k == "ctrl+c" || k == "q" || k == "esc" {
+		if k := msg.String(); k == "ctrl+c" || k == "q" {
 			return m, tea.Quit
 		}
 	case shared.NavigateMsg:
 		m.currentPage = msg.Page
 		windowMsg := tea.WindowSizeMsg{Width: m.windowWidth, Height: m.windowHeight}
-		switch m.currentPage {
-		case shared.ChatPage:
-			m.chatModel, _ = m.chatModel.Update(windowMsg)
-		case shared.ContactPage:
-			m.contactModel, _ = m.contactModel.Update(windowMsg)
-		}
+		return m.updatePage(windowMsg)
 	}
+
+	return m.updatePage(msg)
+}
+
+func (m Model) updatePage(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
 
 	switch m.currentPage {
 	case shared.ChatPage:
