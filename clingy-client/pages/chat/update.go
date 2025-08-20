@@ -19,13 +19,16 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		if msg.String() == "tab" {
-			switch m.focus {
-			case ChatInput:
-				m.chatInput.Blur()
-				m.focus = Contact
-			case Contact:
+			m.focus += 1
+
+			if m.focus == Max {
+				m.focus = 0
+			}
+
+			if m.focus == ChatInput {
 				m.chatInput.Focus()
-				m.focus = ChatInput
+			} else {
+				m.chatInput.Blur()
 			}
 		}
 
@@ -90,6 +93,5 @@ func (m *Model) resizeChatInput(msgWidth int) {
 }
 
 func (m *Model) setChatContent() {
-	m.content = m.formatMessages()
-	m.viewport.SetContent(m.content)
+	m.viewport.SetContent(m.formatMessages())
 }

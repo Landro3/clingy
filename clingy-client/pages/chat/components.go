@@ -38,8 +38,11 @@ var (
 			Border(lipgloss.RoundedBorder()).
 			Padding(0, 1)
 
-	contactButtonStyle = lipgloss.NewStyle().
-				Border(lipgloss.RoundedBorder())
+	buttonStyle = lipgloss.NewStyle().
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color(shared.Fg))
+
+	focusedButtonStyle = buttonStyle.BorderForeground(lipgloss.Color(shared.Purple))
 )
 
 func (m Model) headerView() string {
@@ -61,19 +64,23 @@ func (m Model) chatInputView() string {
 		chatInputStyle = chatInputStyle.BorderForeground(lipgloss.Color(shared.Purple))
 	}
 
+	return chatInputStyle.Render(m.chatInput.View())
+}
+
+func (m Model) contactButtonView() string {
 	if m.focus != Contact {
-		contactButtonStyle = contactButtonStyle.BorderForeground(lipgloss.Color(shared.Fg))
-	} else {
-		contactButtonStyle = contactButtonStyle.BorderForeground(lipgloss.Color(shared.Purple))
+		return buttonStyle.Render("Contact")
 	}
 
-	input := chatInputStyle.Render(m.chatInput.View())
+	return focusedButtonStyle.Render("Contact")
+}
 
-	return lipgloss.PlaceHorizontal(
-		m.viewport.Width,
-		lipgloss.Center,
-		lipgloss.JoinHorizontal(lipgloss.Center, input, contactButtonStyle.Render("Contact")),
-	)
+func (m Model) configButtonView() string {
+	if m.focus != Config {
+		return buttonStyle.Render("Config")
+	}
+
+	return focusedButtonStyle.Render("Config")
 }
 
 func (m Model) formatMessages() string {
