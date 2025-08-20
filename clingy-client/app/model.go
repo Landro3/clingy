@@ -2,6 +2,7 @@ package app
 
 import (
 	"clingy-client/pages/chat"
+	"clingy-client/pages/config"
 	"clingy-client/pages/contact"
 	"clingy-client/shared"
 
@@ -12,6 +13,7 @@ type Model struct {
 	currentPage  shared.PageType
 	chatModel    chat.Model
 	contactModel contact.Model
+	configModel  config.Model
 	windowHeight int
 	windowWidth  int
 }
@@ -23,6 +25,7 @@ func InitialModel() Model {
 		currentPage:  shared.ChatPage,
 		chatModel:    chat.InitialModel(),
 		contactModel: contact.InitialModel(),
+		configModel:  config.InitialModel(),
 		windowHeight: 0,
 		windowWidth:  0,
 	}

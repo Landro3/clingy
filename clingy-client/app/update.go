@@ -32,6 +32,8 @@ func (m Model) updatePage(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.chatModel, cmd = m.chatModel.Update(msg)
 	case shared.ContactPage:
 		m.contactModel, cmd = m.contactModel.Update(msg)
+	case shared.ConfigPage:
+		m.configModel, cmd = m.configModel.Update(msg)
 	}
 
 	return m, cmd

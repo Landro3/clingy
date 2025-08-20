@@ -8,6 +8,8 @@ func (m Model) View() string {
 		return m.chatModel.View()
 	case shared.ContactPage:
 		return m.contactModel.View()
+	case shared.ConfigPage:
+		return m.configModel.View()
 	default:
 		return "Unknown Page"
 	}

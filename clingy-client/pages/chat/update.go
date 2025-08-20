@@ -40,6 +40,8 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 				m.viewport.GotoBottom()
 			case Contact:
 				cmds = append(cmds, shared.NavigateCmd(shared.ContactPage))
+			case Config:
+				cmds = append(cmds, shared.NavigateCmd(shared.ConfigPage))
 			}
 		}
 

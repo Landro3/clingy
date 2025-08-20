@@ -10,6 +10,7 @@ const (
 	ChatPage PageType = iota
 	ContactPage
 	ConnectPage
+	ConfigPage
 )
 
 type NavigateMsg struct {
