@@ -18,10 +18,11 @@ type FocusedElement int
 const (
 	ChatInput FocusedElement = iota
 	Contact
+	Config
+	Max
 )
 
 type Model struct {
-	content   string
 	ready     bool
 	viewport  viewport.Model
 	messages  []ChatMessage
