@@ -22,10 +22,8 @@ func (m Model) View() string {
 		inputTitle = ""
 	}
 
-	// usernameLabel := labelStyle.Render("Username:")
 	usernameView := inputStyle.Render(m.inputs[0].View())
 
-	// uuidLabel := labelStyle.Render("UUID:")
 	uuidView := inputStyle.Render(m.inputs[1].View())
 
 	inputViews := lipgloss.JoinHorizontal(lipgloss.Left, usernameView, " ", uuidView)
