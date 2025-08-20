@@ -37,12 +37,6 @@ var (
 	chatInputStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
 			Padding(0, 1)
-
-	buttonStyle = lipgloss.NewStyle().
-			Border(lipgloss.RoundedBorder()).
-			BorderForeground(lipgloss.Color(shared.Fg))
-
-	focusedButtonStyle = buttonStyle.BorderForeground(lipgloss.Color(shared.Purple))
 )
 
 func (m Model) headerView() string {
@@ -68,19 +62,19 @@ func (m Model) chatInputView() string {
 }
 
 func (m Model) contactButtonView() string {
-	if m.focus != Contact {
-		return buttonStyle.Render("Contact")
+	if m.focus == Contact {
+		return shared.FocusedButtonStyle.Render("Contact")
 	}
 
-	return focusedButtonStyle.Render("Contact")
+	return shared.ButtonStyle.Render("Contact")
 }
 
 func (m Model) configButtonView() string {
-	if m.focus != Config {
-		return buttonStyle.Render("Config")
+	if m.focus == Config {
+		return shared.FocusedButtonStyle.Render("Config")
 	}
 
-	return focusedButtonStyle.Render("Config")
+	return shared.ButtonStyle.Render("Config")
 }
 
 func (m Model) formatMessages() string {
