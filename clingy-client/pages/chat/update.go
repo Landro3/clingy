@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"clingy-client/http3"
 	"clingy-client/shared"
 	"clingy-client/util"
 	"fmt"
@@ -37,6 +38,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			case ChatInput:
 				util.Log("...sending message")
 				util.Log(fmt.Sprintf("messages length: %d", len(m.messages)))
+				http3.SendMessage(m.chatInput.Value())
 				m.messages = append(m.messages, ChatMessage{Author: "Andrew", Content: m.chatInput.Value(), Time: "now", IsOwn: true})
 				m.setChatContent()
 				m.chatInput.SetValue("")
