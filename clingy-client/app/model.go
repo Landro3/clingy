@@ -1,7 +1,6 @@
 package app
 
 import (
-	"clingy-client/http3"
 	"clingy-client/pages/chat"
 	"clingy-client/pages/config"
 	"clingy-client/pages/contact"
@@ -22,7 +21,6 @@ type Model struct {
 func (m Model) Init() tea.Cmd { return nil }
 
 func InitialModel() Model {
-	http3.ConnectToServer()
 	return Model{
 		currentPage:  shared.ChatPage,
 		chatModel:    chat.InitialModel(),
