@@ -60,13 +60,18 @@ type registerMessage struct {
 	ID       string
 }
 
+type chatMessage struct {
+	To      string
+	From    string
+	Message string
+}
+
 func handleStream(stream *quic.Stream, conn *quic.Conn) {
 	defer stream.Close()
 
 	buffer := make([]byte, 1024)
 	n, err := stream.Read(buffer)
 	if err != nil {
-		log.Print("first")
 		log.Fatal(err)
 		return
 	}
@@ -74,7 +79,31 @@ func handleStream(stream *quic.Stream, conn *quic.Conn) {
 	var regMsg registerMessage
 	if err := json.Unmarshal(buffer[:n], &regMsg); err == nil && regMsg.Username != "" {
 		log.Printf("Register: %s", regMsg.Username)
-		connMap.Add(regMsg.Username, conn)
+		connMap.Add(regMsg.ID, conn)
+		log.Printf("sending stuff: %s", regMsg.ID)
+		stream.Write([]byte(regMsg.ID))
+		return
+	}
+
+	var chatMsg chatMessage
+	if err := json.Unmarshal(buffer[:n], &regMsg); err == nil && chatMsg.To != "" {
+		log.Printf("Chat: %s", chatMsg.Message)
+		conn, exists := connMap.Get(chatMsg.To)
+		if exists {
+			stream, err := conn.OpenStreamSync(context.Background())
+			if err != nil {
+				log.Fatal(err)
+				return
+			}
+
+			n, err := stream.Write([]byte(chatMsg.Message))
+			if err != nil {
+				log.Printf("Failed to send message:\n%s", err)
+			}
+
+			log.Printf("✅ Sent %d bytes: %s", n, chatMsg.Message)
+		}
+
 		return
 	}
 
