@@ -2,6 +2,7 @@ package config
 
 import (
 	"clingy-client/shared"
+	"fmt"
 
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/lipgloss"
@@ -17,12 +18,32 @@ func serverInputModel() textinput.Model {
 	return serverInput
 }
 
-func (m Model) registerIdView() string {
+func usernameInputModel() textinput.Model {
+	usernameInput := textinput.New()
+	usernameInput.Placeholder = "Username"
+	usernameInput.CharLimit = 32
+	usernameInput.Width = 30
+	usernameInput.Focus()
+
+	return usernameInput
+}
+
+func (m Model) registerIDView() string {
+	style := shared.ButtonStyle
+	if m.focusIndex == len(m.inputs) {
+		style = shared.FocusedButtonStyle
+	}
+
+	uniqueID := "N/A"
+	if m.config.UniqueID != "" {
+		uniqueID = m.config.UniqueID
+	}
+
 	return lipgloss.JoinHorizontal(
 		lipgloss.Center,
-		shared.ButtonStyle.Render("Register"),
+		style.Render("Register"),
 		" ",
-		shared.GrayText.Render("Current ID: N/A"),
-		m.spinner.View(),
+		shared.GrayText.Render(fmt.Sprintf("Current ID: %s", uniqueID)),
+		// m.spinner.View(),
 	)
 }

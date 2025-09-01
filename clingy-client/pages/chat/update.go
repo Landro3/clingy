@@ -18,6 +18,19 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	)
 
 	switch msg := msg.(type) {
+	case IncomingMessageMsg:
+		chatMsg := ChatMessage{
+			Author:  msg.Message.Author,
+			Content: msg.Message.Content,
+			Time:    msg.Message.Time,
+			IsOwn:   false,
+		}
+		m.messages = append(m.messages, chatMsg)
+		m.setChatContent()
+		m.viewport.GotoBottom()
+
+		cmds = append(cmds, WaitForMessage())
+
 	case tea.KeyMsg:
 		if msg.String() == "tab" {
 			m.focus += 1

@@ -1,6 +1,9 @@
 package chat
 
 import (
+	"clingy-client/http3"
+	"time"
+
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
@@ -53,6 +56,21 @@ func InitialModel() Model {
 	return m
 }
 
+type IncomingMessageMsg struct {
+	Message http3.IncomingMessage
+}
+
+func WaitForMessage() tea.Cmd {
+	return func() tea.Msg {
+		select {
+		case msg := <-http3.GetMessageChannel():
+			return IncomingMessageMsg{Message: msg}
+		case <-time.After(100 * time.Millisecond):
+			return nil
+		}
+	}
+}
+
 func (m Model) Init() tea.Cmd {
-	return nil
+	return WaitForMessage()
 }
