@@ -106,7 +106,6 @@ func handleStream(stream *quic.Stream, conn *quic.Conn) {
 
 			log.Printf("✅ Sent %d bytes to %s: %s", n, chatMsg.To, chatMsg.Message)
 		}
-
 		return
 	}
 
