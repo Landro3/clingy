@@ -21,19 +21,30 @@ type Model struct {
 }
 
 func (m Model) Init() tea.Cmd {
-	return nil
+	switch m.currentPage {
+	case shared.ChatPage:
+		return m.chatModel.Init()
+	case shared.ContactPage:
+		return m.contactModel.Init()
+	case shared.ConfigPage:
+		return m.configModel.Init()
+	default:
+		return nil
+	}
 }
 
 func InitialModel() Model {
-	serverConfig := services.NewConfig()
-	if serverConfig.Username != "" && serverConfig.UniqueID != "" {
-		http3.RegisterInServer(serverConfig)
+	configService := services.NewConfig()
+	if configService.Username != "" && configService.UniqueID != "" {
+		http3.RegisterInServer(configService)
 	}
+
+	contactService := services.NewContact()
 	return Model{
 		currentPage:  shared.ChatPage,
-		chatModel:    chat.InitialModel(),
-		contactModel: contact.InitialModel(),
-		configModel:  config.InitialModel(serverConfig),
+		chatModel:    chat.InitialModel(configService),
+		contactModel: contact.InitialModel(contactService),
+		configModel:  config.InitialModel(configService),
 		windowHeight: 0,
 		windowWidth:  0,
 	}
