@@ -51,13 +51,15 @@ type IncomingMessageMsg struct {
 	Message http3.ChatMessage
 }
 
+type NoMessageMsg struct{}
+
 func WaitForMessage() tea.Cmd {
 	return func() tea.Msg {
 		select {
 		case msg := <-http3.GetMessageChannel():
 			return IncomingMessageMsg{Message: msg}
 		case <-time.After(1000 * time.Millisecond):
-			return nil
+			return NoMessageMsg{}
 		}
 	}
 }
