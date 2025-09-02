@@ -13,27 +13,20 @@ import (
 	quic "github.com/quic-go/quic-go"
 )
 
-var (
-	connection  *quic.Conn
-	isConnected bool
-)
-
-func IsConnected() bool { return isConnected }
-
-// func IsRegistered() bool { return isRegistered }
+var connection *quic.Conn
 
 type registerMessage struct {
 	Username string
 	ID       string
 }
 
-type IncomingMessage struct {
-	Content string
-	Author  string
-	Time    string
+type ChatMessage struct {
+	To      string
+	From    string
+	Message string
 }
 
-var messageChannel = make(chan IncomingMessage, 100)
+var messageChannel = make(chan ChatMessage, 100)
 
 func ConnectToServer(serverAddr string) error {
 	tlsConfig := &tls.Config{
@@ -42,7 +35,6 @@ func ConnectToServer(serverAddr string) error {
 		InsecureSkipVerify: true, // Only for self-signed certs
 	}
 
-	// TODO: Config value
 	conn, err := quic.DialAddr(context.Background(), serverAddr, tlsConfig, nil)
 	if err != nil {
 		return fmt.Errorf("failed to connect:\n%s", err)
@@ -53,10 +45,9 @@ func ConnectToServer(serverAddr string) error {
 	select {
 	case <-conn.HandshakeComplete():
 		util.Log("✅ Handshake completed")
-		isConnected = true
+		go keepConnectionAlive()
 	case <-time.After(5 * time.Second):
 		util.Log("❌ Handshake timeout")
-		isConnected = false
 		return errors.New("could not connect to server")
 	}
 
@@ -71,16 +62,9 @@ func RegisterInServer(config *services.Config) {
 	}
 
 	message := registerMessage{Username: config.Username, ID: config.UniqueID}
-	bytes, err := json.Marshal(message)
+	bytes, _ := json.Marshal(message)
+	err = SendMessage(bytes)
 	if err != nil {
-		util.Log(fmt.Sprintf("%s", err))
-	}
-
-	payload := string(bytes)
-	err = SendMessage(payload)
-	if err != nil {
-		// TODO: registered?
-		isConnected = false
 		util.Log(err.Error())
 	}
 
@@ -89,19 +73,19 @@ func RegisterInServer(config *services.Config) {
 	StartMessageListener()
 }
 
-func SendMessage(msg string) error {
+func SendMessage(bytes []byte) error {
 	stream, err := connection.OpenStreamSync(context.Background())
 	if err != nil {
 		return fmt.Errorf("failed to open stream:\n%s", err)
 	}
 	defer stream.Close()
 
-	n, err := stream.Write([]byte(msg))
+	n, err := stream.Write(bytes)
 	if err != nil {
 		return fmt.Errorf("failed to send message:\n%s", err)
 	}
 
-	util.Log(fmt.Sprintf("✅ Sent %d bytes: %s", n, msg))
+	util.Log(fmt.Sprintf("✅ Sent %d bytes", n))
 	return nil
 }
 
@@ -128,20 +112,45 @@ func handleIncomingStream(stream *quic.Stream) {
 		return
 	}
 
-	msg := IncomingMessage{
-		Content: string(buffer[:n]),
-		Author:  "Server",
-		Time:    time.Now().Format("15:04"),
+	var serverChatMsg ChatMessage
+	if err := json.Unmarshal(buffer[:n], &serverChatMsg); err == nil {
+		msg := ChatMessage{
+			Message: serverChatMsg.Message,
+			To:      serverChatMsg.To,
+			From:    serverChatMsg.From,
+		}
+
+		select {
+		case messageChannel <- msg:
+			util.Log(fmt.Sprintf("📨 Received structured message from %s: %s", msg.From, msg.Message))
+		default:
+			util.Log("Message channel full, dropping message")
+		}
 	}
 
-	select {
-	case messageChannel <- msg:
-		util.Log(fmt.Sprintf("📨 Received message: %s", msg.Content))
-	default:
-		util.Log("Message channel full, dropping message")
-	}
+	util.Log(fmt.Sprintf("Received response: %s", string(buffer[:n])))
 }
 
-func GetMessageChannel() <-chan IncomingMessage {
+func GetMessageChannel() <-chan ChatMessage {
 	return messageChannel
+}
+
+func keepConnectionAlive() error {
+	ticker := time.NewTicker(20 * time.Second)
+	defer ticker.Stop()
+
+	ctx := context.Background()
+
+	for {
+		select {
+		case <-ticker.C:
+			err := SendMessage([]byte("ping"))
+			if err != nil {
+				return fmt.Errorf("failed to write keep-alive ping: %w", err)
+			}
+
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+	}
 }
