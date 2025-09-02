@@ -11,6 +11,7 @@ import (
 func serverInputModel() textinput.Model {
 	serverInput := textinput.New()
 	serverInput.Placeholder = "clingy.server.com"
+	serverInput.SetValue("localhost:8443")
 	serverInput.CharLimit = 32
 	serverInput.Width = 30
 	serverInput.Focus()

@@ -4,7 +4,6 @@ import (
 	"clingy-client/http3"
 	"clingy-client/shared"
 	"clingy-client/util"
-	"fmt"
 
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
@@ -17,8 +16,6 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 	)
 
 	validForm := m.inputs[0].Value() != "" && m.inputs[1].Value() != ""
-
-	util.Log(fmt.Sprintf("%v", m.config))
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
