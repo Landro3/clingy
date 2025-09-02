@@ -1,7 +1,9 @@
 package contact
 
 import (
+	"clingy-client/services"
 	"clingy-client/shared"
+	"clingy-client/util"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -27,6 +29,21 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			} else if msg.String() == "r" {
 				m.mode = Remove
 			}
+
+			if msg.String() == "enter" {
+				selectedItem := m.list.SelectedItem()
+				if selectedItem != nil {
+					contact, ok := selectedItem.(services.ContactInfo)
+					if ok {
+						cmds = append(cmds, tea.Sequence(
+							shared.NavigateCmd(shared.ChatPage),
+							SelectChatCmd(contact),
+						))
+					} else {
+						util.Log("Failed to cast selected item to ContactInfo")
+					}
+				}
+			}
 		} else {
 			if msg.String() == "esc" {
 				m.mode = None
@@ -36,6 +53,16 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 				}
 
 				return m, tea.Batch(cmds...)
+			}
+
+			if msg.String() == "enter" && m.mode == Add {
+				contactInfo := services.NewContactInfo(m.inputs[0].Value(), m.inputs[1].Value())
+				m.contact.AddContact(contactInfo)
+				m.list.SetItems(m.contact.ToListItems())
+				for i := range m.inputs {
+					m.inputs[i].SetValue("")
+				}
+				m.mode = None
 			}
 
 			for i := range m.inputs {

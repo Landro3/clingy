@@ -2,7 +2,6 @@ package main
 
 import (
 	"clingy-client/app"
-	"clingy-client/http3"
 	"fmt"
 	"os"
 
@@ -10,7 +9,6 @@ import (
 )
 
 func main() {
-	http3.ConnectToServer()
 	m := app.InitialModel()
 	p := tea.NewProgram(
 		m,

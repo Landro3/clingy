@@ -1,10 +1,12 @@
 package http3
 
 import (
+	"clingy-client/services"
 	"clingy-client/util"
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -18,62 +20,137 @@ type registerMessage struct {
 	ID       string
 }
 
-func ConnectToServer() {
+type ChatMessage struct {
+	To      string
+	From    string
+	Message string
+}
+
+var messageChannel = make(chan ChatMessage, 100)
+
+func ConnectToServer(serverAddr string) error {
 	tlsConfig := &tls.Config{
 		MinVersion:         tls.VersionTLS13,
 		NextProtos:         []string{"clingy-v1"},
 		InsecureSkipVerify: true, // Only for self-signed certs
 	}
-	conn, err := quic.DialAddr(context.Background(), "localhost:8443", tlsConfig, nil)
+
+	conn, err := quic.DialAddr(context.Background(), serverAddr, tlsConfig, nil)
 	if err != nil {
-		util.Log(fmt.Sprintf("Failed to connect:\n%s", err))
+		return fmt.Errorf("failed to connect:\n%s", err)
 	}
 
 	connection = conn
 
-	// Wait for handshake to complete
 	select {
 	case <-conn.HandshakeComplete():
 		util.Log("✅ Handshake completed")
+		go keepConnectionAlive()
 	case <-time.After(5 * time.Second):
 		util.Log("❌ Handshake timeout")
+		return errors.New("could not connect to server")
 	}
 
-	registerInServer()
+	return nil
 }
 
-func registerInServer() {
-	message := registerMessage{Username: "Testy", ID: "jfp9q8uf89ahflkj3r32o98g89"}
-
-	bytes, err := json.Marshal(message)
+func RegisterInServer(config *services.Config) {
+	err := ConnectToServer(config.ServerAddr)
 	if err != nil {
-		util.Log(fmt.Sprintf("%s", err))
+		util.Log(err.Error())
+		return
 	}
 
-	payload := string(bytes)
-	SendMessage(payload)
+	message := registerMessage{Username: config.Username, ID: config.UniqueID}
+	bytes, _ := json.Marshal(message)
+	err = SendMessage(bytes)
+	if err != nil {
+		util.Log(err.Error())
+	}
+
+	config.UpdateConfig(config)
+
+	StartMessageListener()
 }
 
-func SendMessage(msg string) {
+func SendMessage(bytes []byte) error {
 	stream, err := connection.OpenStreamSync(context.Background())
 	if err != nil {
-		util.Log(fmt.Sprintf("Failed to open stream:\n%s", err))
+		return fmt.Errorf("failed to open stream:\n%s", err)
 	}
 	defer stream.Close()
 
-	n, err := stream.Write([]byte(msg))
+	n, err := stream.Write(bytes)
 	if err != nil {
-		util.Log(fmt.Sprintf("Failed to send message:\n%s", err))
+		return fmt.Errorf("failed to send message:\n%s", err)
 	}
 
-	util.Log(fmt.Sprintf("✅ Sent %d bytes: %s", n, msg))
+	util.Log(fmt.Sprintf("✅ Sent %d bytes", n))
+	return nil
+}
 
-	// Optional: Read response from server
+func StartMessageListener() {
+	go func() {
+		for {
+			stream, err := connection.AcceptStream(context.Background())
+			if err != nil {
+				util.Log(fmt.Sprintf("Error accepting stream: %v", err))
+				return
+			}
+			go handleIncomingStream(stream)
+		}
+	}()
+}
+
+func handleIncomingStream(stream *quic.Stream) {
+	defer stream.Close()
+
 	buffer := make([]byte, 1024)
-	n, err = stream.Read(buffer)
+	n, err := stream.Read(buffer)
 	if err != nil {
-		util.Log(fmt.Sprintf("No response or error reading: %v", err))
-	} else {
-		util.Log(fmt.Sprintf("📨 Server response: %s", buffer[:n]))
+		util.Log(fmt.Sprintf("Error reading incoming message: %v", err))
+		return
+	}
+
+	var serverChatMsg ChatMessage
+	if err := json.Unmarshal(buffer[:n], &serverChatMsg); err == nil {
+		msg := ChatMessage{
+			Message: serverChatMsg.Message,
+			To:      serverChatMsg.To,
+			From:    serverChatMsg.From,
+		}
+
+		select {
+		case messageChannel <- msg:
+			util.Log(fmt.Sprintf("📨 Received structured message from %s: %s", msg.From, msg.Message))
+		default:
+			util.Log("Message channel full, dropping message")
+		}
+	}
+
+	util.Log(fmt.Sprintf("Received response: %s", string(buffer[:n])))
+}
+
+func GetMessageChannel() <-chan ChatMessage {
+	return messageChannel
+}
+
+func keepConnectionAlive() error {
+	ticker := time.NewTicker(20 * time.Second)
+	defer ticker.Stop()
+
+	ctx := context.Background()
+
+	for {
+		select {
+		case <-ticker.C:
+			err := SendMessage([]byte("ping"))
+			if err != nil {
+				return fmt.Errorf("failed to write keep-alive ping: %w", err)
+			}
+
+		case <-ctx.Done():
+			return ctx.Err()
+		}
 	}
 }
