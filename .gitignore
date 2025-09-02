@@ -37,3 +37,4 @@ clingy-client/debug.log
 server.crt
 server.key
 .DS_Store
+config.json
