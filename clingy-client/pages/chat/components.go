@@ -40,7 +40,11 @@ var (
 )
 
 func (m Model) headerView() string {
-	title := titleStyle.Render("Mr. Pager")
+	titleText := "Unknown"
+	if m.currentChat != nil {
+		titleText = m.currentChat.Username
+	}
+	title := titleStyle.Render(titleText)
 	line := strings.Repeat("─", max(0, m.viewport.Width-lipgloss.Width(title)))
 	return lipgloss.JoinHorizontal(lipgloss.Center, title, line)
 }
@@ -81,14 +85,14 @@ func (m Model) formatMessages() string {
 	var content strings.Builder
 	for _, msg := range m.messages {
 		var msgText string
-		if msg.IsOwn {
-			msgText = fmt.Sprintf("%s [%s]\n%s", msg.Author, msg.Time, msg.Content)
+		if msg.From == m.config.UniqueID {
+			msgText = fmt.Sprintf("%s [%s]\n%s", msg.From, "TBD:TBD", msg.Message)
 		} else {
-			msgText = fmt.Sprintf("[%s] %s\n%s", msg.Time, msg.Author, msg.Content)
+			msgText = fmt.Sprintf("[%s] %s\n%s", "TBD:TBD", msg.From, msg.Message)
 		}
 
 		var line string
-		if msg.IsOwn {
+		if msg.From == m.config.UniqueID {
 			boxedMsg := rightChatStyle.Render(msgText)
 			line = lipgloss.PlaceHorizontal(m.viewport.Width-2, lipgloss.Right, boxedMsg)
 		} else {

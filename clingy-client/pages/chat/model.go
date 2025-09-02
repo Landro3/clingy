@@ -2,19 +2,13 @@ package chat
 
 import (
 	"clingy-client/http3"
+	"clingy-client/services"
 	"time"
 
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 )
-
-type ChatMessage struct {
-	Author  string
-	Content string
-	Time    string
-	IsOwn   bool
-}
 
 type FocusedElement int
 
@@ -26,38 +20,35 @@ const (
 )
 
 type Model struct {
-	ready     bool
-	viewport  viewport.Model
-	messages  []ChatMessage
-	chatInput textinput.Model
-	focus     FocusedElement
+	ready       bool
+	viewport    viewport.Model
+	messages    []http3.ChatMessage
+	chatInput   textinput.Model
+	focus       FocusedElement
+	currentChat *services.ContactInfo
+	config      *services.Config
 }
 
-func InitialModel() Model {
+func InitialModel(configService *services.Config) Model {
 	ti := textinput.New()
 	ti.Placeholder = "The message will go here..."
 	ti.Focus()
 
-	messages := []ChatMessage{
-		{Author: "Alice", Content: "Hello everyone!", Time: "14:30", IsOwn: false},
-		{Author: "You", Content: "Hey Alice!", Time: "14:31", IsOwn: true},
-		{Author: "Bob", Content: "Hey Alice, how's it going?", Time: "14:32", IsOwn: false},
-		{Author: "You", Content: "Pretty good, thanks!", Time: "14:33", IsOwn: true},
-		{Author: "Alice", Content: "Working on some Go code.", Time: "14:34", IsOwn: false},
-		{Author: "You", Content: "Nice! What kind of project?", Time: "14:35", IsOwn: true},
-	}
+	messages := []http3.ChatMessage{}
 
 	m := Model{
-		messages:  messages,
-		chatInput: ti,
-		ready:     false,
+		messages:    messages,
+		chatInput:   ti,
+		ready:       false,
+		currentChat: nil,
+		config:      configService,
 	}
 
 	return m
 }
 
 type IncomingMessageMsg struct {
-	Message http3.IncomingMessage
+	Message http3.ChatMessage
 }
 
 func WaitForMessage() tea.Cmd {
@@ -65,7 +56,7 @@ func WaitForMessage() tea.Cmd {
 		select {
 		case msg := <-http3.GetMessageChannel():
 			return IncomingMessageMsg{Message: msg}
-		case <-time.After(100 * time.Millisecond):
+		case <-time.After(1000 * time.Millisecond):
 			return nil
 		}
 	}

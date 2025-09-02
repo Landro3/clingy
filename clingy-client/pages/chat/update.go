@@ -2,9 +2,9 @@ package chat
 
 import (
 	"clingy-client/http3"
+	"clingy-client/pages/contact"
 	"clingy-client/shared"
-	"clingy-client/util"
-	"fmt"
+	"encoding/json"
 
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
@@ -17,19 +17,14 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 		cmds []tea.Cmd
 	)
 
+	// TODO: change this to only be called when not already polling
+	cmds = append(cmds, WaitForMessage())
+
 	switch msg := msg.(type) {
 	case IncomingMessageMsg:
-		chatMsg := ChatMessage{
-			Author:  msg.Message.Author,
-			Content: msg.Message.Content,
-			Time:    msg.Message.Time,
-			IsOwn:   false,
-		}
-		m.messages = append(m.messages, chatMsg)
+		m.messages = append(m.messages, msg.Message)
 		m.setChatContent()
 		m.viewport.GotoBottom()
-
-		cmds = append(cmds, WaitForMessage())
 
 	case tea.KeyMsg:
 		if msg.String() == "tab" {
@@ -49,10 +44,17 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 		if msg.String() == "enter" {
 			switch m.focus {
 			case ChatInput:
-				util.Log("...sending message")
-				util.Log(fmt.Sprintf("messages length: %d", len(m.messages)))
-				http3.SendMessage(m.chatInput.Value())
-				m.messages = append(m.messages, ChatMessage{Author: "Andrew", Content: m.chatInput.Value(), Time: "now", IsOwn: true})
+				if m.currentChat == nil {
+					break
+				}
+				message := http3.ChatMessage{
+					To:      m.currentChat.ID,
+					From:    m.config.UniqueID,
+					Message: m.chatInput.Value(),
+				}
+				bytes, _ := json.Marshal(message)
+				http3.SendMessage(bytes)
+				m.messages = append(m.messages, message)
 				m.setChatContent()
 				m.chatInput.SetValue("")
 				m.viewport.GotoBottom()
@@ -91,6 +93,8 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 		}
 
 		m.setChatContent()
+	case contact.SelectChatMsg:
+		m.currentChat = &msg.Chat
 	}
 
 	m.viewport, cmd = m.viewport.Update(msg)
