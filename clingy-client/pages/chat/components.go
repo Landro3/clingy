@@ -62,6 +62,7 @@ func (m Model) chatInputView() string {
 		chatInputStyle = chatInputStyle.BorderForeground(lipgloss.Color(shared.Purple))
 	}
 
+	chatInputStyle = chatInputStyle.Width(m.viewport.Width - lipgloss.Width(m.contactButtonView()) - lipgloss.Width(m.contactButtonView()) - 12)
 	return chatInputStyle.Render(m.chatInput.View())
 }
 
