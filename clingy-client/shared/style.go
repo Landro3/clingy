@@ -7,7 +7,7 @@ var (
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(lipgloss.Color(Fg))
 
-	FocusedButtonStyle = ButtonStyle.BorderForeground(lipgloss.Color(Purple))
+	FocusedButtonStyle = ButtonStyle.BorderForeground(lipgloss.Color(Purple)).Foreground(lipgloss.Color(Purple))
 
 	GrayText = lipgloss.NewStyle().Foreground(lipgloss.Color(Comment))
 )

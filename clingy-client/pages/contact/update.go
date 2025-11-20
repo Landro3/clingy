@@ -65,6 +65,18 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 				m.mode = None
 			}
 
+			if m.mode == Remove {
+				switch msg.String() {
+				case "y":
+					contactToRemove := m.list.SelectedItem().(services.ContactInfo)
+					m.contact.RemoveContact(contactToRemove.ID)
+					m.list.SetItems(m.contact.ToListItems())
+					m.mode = None
+				case "n":
+					m.mode = None
+				}
+			}
+
 			for i := range m.inputs {
 				m.inputs[i], cmd = m.inputs[i].Update(msg)
 				cmds = append(cmds, cmd)

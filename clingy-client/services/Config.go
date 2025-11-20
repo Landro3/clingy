@@ -6,9 +6,10 @@ import (
 )
 
 type Config struct {
-	Username   string `json:"username"`
-	ServerAddr string `json:"server_addr"`
-	UniqueID   string `json:"unique_id"`
+	Username   string        `json:"username"`
+	ServerAddr string        `json:"server_addr"`
+	UniqueID   string        `json:"unique_id"`
+	Contacts   []ContactInfo `json:"contacts"`
 }
 
 func NewConfig() *Config {
@@ -30,6 +31,11 @@ func (c *Config) loadFromFile() error {
 		c.Username = ""
 		c.ServerAddr = ""
 		c.UniqueID = ""
+		c.Contacts = []ContactInfo{}
+	}
+
+	if c.Contacts == nil {
+		c.Contacts = []ContactInfo{}
 	}
 
 	return nil

@@ -39,7 +39,7 @@ func InitialModel() Model {
 		http3.RegisterInServer(configService)
 	}
 
-	contactService := services.NewContact()
+	contactService := services.NewContact(configService)
 	return Model{
 		currentPage:  shared.ChatPage,
 		chatModel:    chat.InitialModel(configService),
