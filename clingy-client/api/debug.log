@@ -1,0 +1,984 @@
+✅ Handshake completed
+✅ Sent 62 bytes
+starting message listener
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 62 bytes
+starting message listener
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 62 bytes
+starting message listener
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 62 bytes
+starting message listener
+✅ Handshake completed
+✅ Sent 62 bytes
+starting message listener
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+Error accepting stream: timeout: no recent network activity
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 100 bytes
+📨 Received structured message from yvd7VwEeLT01q2hyEAFwREIZrJCejfIR: cool
+Received response: {"To":"2pZmLpNEJtfX2ZSbQ68vIEM4ih553egk","From":"yvd7VwEeLT01q2hyEAFwREIZrJCejfIR","Message":"cool"}
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 107 bytes
+📨 Received structured message from yvd7VwEeLT01q2hyEAFwREIZrJCejfIR: why not now
+Received response: {"To":"2pZmLpNEJtfX2ZSbQ68vIEM4ih553egk","From":"yvd7VwEeLT01q2hyEAFwREIZrJCejfIR","Message":"why not now"}
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 62 bytes
+starting message listener
+✅ Handshake completed
+✅ Sent 62 bytes
+starting message listener
+✅ Sent 4 bytes
+✅ Sent 111 bytes
+✅ Sent 100 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: what
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"what"}
+✅ Sent 4 bytes
+✅ Sent 107 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: there it is
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"there it is"}
+✅ Sent 4 bytes
+✅ Sent 129 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: sometimes they don't come through
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"sometimes they don't come through"}
+✅ Sent 103 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 107 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: was that is
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"was that is"}
+✅ Sent 124 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: it's like when they close it
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"it's like when they close it"}
+✅ Sent 97 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: a
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"a"}
+✅ Sent 97 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: b
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"b"}
+✅ Sent 97 bytes
+✅ Sent 97 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: c
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"c"}
+✅ Sent 97 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: a
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"a"}
+✅ Sent 97 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: f
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"f"}
+✅ Sent 97 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: e
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"e"}
+✅ Sent 97 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: d
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"d"}
+✅ Sent 97 bytes
+✅ Sent 97 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: d
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"d"}
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 100 bytes
+📨 Received structured message from qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4: sick
+Received response: {"To":"tEcPMZvDXiERJIaePZacLTXVW8AnLPrh","From":"qd6BaQJ6act5AlXh7yqU8hzO0xV2JDJ4","Message":"sick"}
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Sent 104 bytes
+📨 Received structured message from GpUYkN30ZE7kTcaWuvdBEWUmpYUDF4Ck: let's go
+Received response: {"To":"O1m8JCN6x925tM8AuWg2a2O6yrzah7jI","From":"GpUYkN30ZE7kTcaWuvdBEWUmpYUDF4Ck","Message":"let's go"}
+✅ Sent 4 bytes
+✅ Sent 103 bytes
+📨 Received structured message from GpUYkN30ZE7kTcaWuvdBEWUmpYUDF4Ck: come on
+Received response: {"To":"O1m8JCN6x925tM8AuWg2a2O6yrzah7jI","From":"GpUYkN30ZE7kTcaWuvdBEWUmpYUDF4Ck","Message":"come on"}
+✅ Sent 108 bytes
+📨 Received structured message from GpUYkN30ZE7kTcaWuvdBEWUmpYUDF4Ck: dont do this
+Received response: {"To":"O1m8JCN6x925tM8AuWg2a2O6yrzah7jI","From":"GpUYkN30ZE7kTcaWuvdBEWUmpYUDF4Ck","Message":"dont do this"}
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 100 bytes
+📨 Received structured message from GpUYkN30ZE7kTcaWuvdBEWUmpYUDF4Ck: what
+Received response: {"To":"O1m8JCN6x925tM8AuWg2a2O6yrzah7jI","From":"GpUYkN30ZE7kTcaWuvdBEWUmpYUDF4Ck","Message":"what"}
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+Error accepting stream: timeout: no recent network activity
+✅ Sent 98 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 99 bytes
+📨 Received structured message from C70XsJ005wMNs7pL9Gzv1OImjUBBi45b: why
+Received response: {"To":"U1pqTaSj9yw7JDjl68uPzAMXM0a4lFuH","From":"C70XsJ005wMNs7pL9Gzv1OImjUBBi45b","Message":"why"}
+✅ Sent 4 bytes
+✅ Sent 98 bytes
+📨 Received structured message from C70XsJ005wMNs7pL9Gzv1OImjUBBi45b: no
+Received response: {"To":"U1pqTaSj9yw7JDjl68uPzAMXM0a4lFuH","From":"C70XsJ005wMNs7pL9Gzv1OImjUBBi45b","Message":"no"}
+✅ Sent 4 bytes
+✅ Sent 98 bytes
+📨 Received structured message from C70XsJ005wMNs7pL9Gzv1OImjUBBi45b: no
+Received response: {"To":"U1pqTaSj9yw7JDjl68uPzAMXM0a4lFuH","From":"C70XsJ005wMNs7pL9Gzv1OImjUBBi45b","Message":"no"}
+✅ Sent 98 bytes
+📨 Received structured message from C70XsJ005wMNs7pL9Gzv1OImjUBBi45b: no
+Received response: {"To":"U1pqTaSj9yw7JDjl68uPzAMXM0a4lFuH","From":"C70XsJ005wMNs7pL9Gzv1OImjUBBi45b","Message":"no"}
+Error accepting stream: timeout: no recent network activity
+✅ Sent 112 bytes
+📨 Received structured message from C70XsJ005wMNs7pL9Gzv1OImjUBBi45b: what is the deal
+Received response: {"To":"U1pqTaSj9yw7JDjl68uPzAMXM0a4lFuH","From":"C70XsJ005wMNs7pL9Gzv1OImjUBBi45b","Message":"what is the deal"}
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+incoming message
+incoming message
+incoming message
+incoming message
+incoming message
+✅ Sent 4 bytes
+✅ Sent 99 bytes
+📨 Received structured message from C70XsJ005wMNs7pL9Gzv1OImjUBBi45b: yes
+Received response: {"To":"U1pqTaSj9yw7JDjl68uPzAMXM0a4lFuH","From":"C70XsJ005wMNs7pL9Gzv1OImjUBBi45b","Message":"yes"}
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 101 bytes
+📨 Received structured message from C70XsJ005wMNs7pL9Gzv1OImjUBBi45b: do it
+Received response: {"To":"U1pqTaSj9yw7JDjl68uPzAMXM0a4lFuH","From":"C70XsJ005wMNs7pL9Gzv1OImjUBBi45b","Message":"do it"}
+✅ Sent 4 bytes
+✅ Sent 110 bytes
+📨 Received structured message from C70XsJ005wMNs7pL9Gzv1OImjUBBi45b: are we serious
+Received response: {"To":"U1pqTaSj9yw7JDjl68uPzAMXM0a4lFuH","From":"C70XsJ005wMNs7pL9Gzv1OImjUBBi45b","Message":"are we serious"}
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+incoming message
+incoming message
+incoming message
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+Error accepting stream: timeout: no recent network activity
+Error accepting stream: timeout: no recent network activity
+✅ Sent 106 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 98 bytes
+📨 Received structured message from GQj7hFgORbcYrgEWcIaigiapBGY2BFks: ok
+Received response: {"To":"2BmefHDwQZ20UE19Qa0LGQJbmDAOoq9q","From":"GQj7hFgORbcYrgEWcIaigiapBGY2BFks","Message":"ok"}
+✅ Sent 4 bytes
+✅ Sent 98 bytes
+📨 Received structured message from GQj7hFgORbcYrgEWcIaigiapBGY2BFks: no
+Received response: {"To":"2BmefHDwQZ20UE19Qa0LGQJbmDAOoq9q","From":"GQj7hFgORbcYrgEWcIaigiapBGY2BFks","Message":"no"}
+✅ Sent 98 bytes
+📨 Received structured message from GQj7hFgORbcYrgEWcIaigiapBGY2BFks: we
+Received response: {"To":"2BmefHDwQZ20UE19Qa0LGQJbmDAOoq9q","From":"GQj7hFgORbcYrgEWcIaigiapBGY2BFks","Message":"we"}
+✅ Sent 99 bytes
+📨 Received structured message from GQj7hFgORbcYrgEWcIaigiapBGY2BFks: got
+Received response: {"To":"2BmefHDwQZ20UE19Qa0LGQJbmDAOoq9q","From":"GQj7hFgORbcYrgEWcIaigiapBGY2BFks","Message":"got"}
+✅ Sent 98 bytes
+📨 Received structured message from GQj7hFgORbcYrgEWcIaigiapBGY2BFks: it
+Received response: {"To":"2BmefHDwQZ20UE19Qa0LGQJbmDAOoq9q","From":"GQj7hFgORbcYrgEWcIaigiapBGY2BFks","Message":"it"}
+✅ Sent 4 bytes
+✅ Sent 100 bytes
+📨 Received structured message from GQj7hFgORbcYrgEWcIaigiapBGY2BFks: sick
+Received response: {"To":"2BmefHDwQZ20UE19Qa0LGQJbmDAOoq9q","From":"GQj7hFgORbcYrgEWcIaigiapBGY2BFks","Message":"sick"}
+✅ Sent 103 bytes
+📨 Received structured message from GQj7hFgORbcYrgEWcIaigiapBGY2BFks: love it
+Received response: {"To":"2BmefHDwQZ20UE19Qa0LGQJbmDAOoq9q","From":"GQj7hFgORbcYrgEWcIaigiapBGY2BFks","Message":"love it"}
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+Error accepting stream: timeout: no recent network activity
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Handshake completed
+✅ Sent 60 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+Error accepting stream: timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+{User2 registered}
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+failed to connect:
+timeout: no recent network activity
+✅ Handshake completed
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Handshake completed
+✅ Handshake completed
+✅ Handshake completed
+✅ Handshake completed
+✅ Handshake completed
+✅ Handshake completed
+✅ Handshake completed
+✅ Handshake completed
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Handshake completed
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Handshake completed
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+🔄 Starting registration process for user: user1 to server: localhost:8443
+✅ Handshake completed
+✅ Successfully connected to server
+📤 Sending registration message: {"Username":"user1"}
+✅ Opened registration stream
+✅ Sent 20 bytes to server
+⏱️ Set read deadline: 2025-11-28 15:41:22.390966 -0500 EST m=+35.069608318 (timeout: 10s)
+📥 Waiting for server response...
+❌ Failed to read from stream: EOF
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes
+✅ Sent 4 bytes

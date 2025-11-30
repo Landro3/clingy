@@ -2,14 +2,26 @@ package main
 
 import (
 	"context"
+	"crypto/rand"
 	"crypto/tls"
 	"encoding/json"
+	"fmt"
 	"log"
 
 	quic "github.com/quic-go/quic-go"
 )
 
 var connMap *ConnectionMap
+
+func generateUUID() string {
+	b := make([]byte, 16)
+	_, err := rand.Read(b)
+	if err != nil {
+		log.Printf("Error generating UUID: %v", err)
+		return ""
+	}
+	return fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6], b[6:8], b[8:10], b[10:16])
+}
 
 func main() {
 	cert, err := tls.LoadX509KeyPair("server.crt", "server.key")
@@ -57,7 +69,13 @@ func handleConnection(conn *quic.Conn) {
 
 type registerMessage struct {
 	Username string
-	ID       string
+}
+
+type registrationResponse struct {
+	Success    bool   `json:"success"`
+	AssignedID string `json:"assignedId"`
+	Username   string `json:"username"`
+	Message    string `json:"message,omitempty"`
 }
 
 type chatMessage struct {
@@ -67,8 +85,6 @@ type chatMessage struct {
 }
 
 func handleStream(stream *quic.Stream, conn *quic.Conn) {
-	defer stream.Close()
-
 	buffer := make([]byte, 1024)
 	n, err := stream.Read(buffer)
 	if err != nil {
@@ -82,8 +98,27 @@ func handleStream(stream *quic.Stream, conn *quic.Conn) {
 
 	var regMsg registerMessage
 	if err := json.Unmarshal(buffer[:n], &regMsg); err == nil && regMsg.Username != "" {
-		log.Printf("Registered\nUsername: %s\nID: %s", regMsg.Username, regMsg.ID)
-		connMap.Add(regMsg.ID, conn)
+		// Server generates UUID
+		assignedID := generateUUID()
+
+		log.Printf("Registered\nUsername: %s\nAssigned ID: %s", regMsg.Username, assignedID)
+		connMap.Add(assignedID, conn)
+
+		// Send registration confirmation back to client
+		response := registrationResponse{
+			Success:    true,
+			AssignedID: assignedID,
+			Username:   regMsg.Username,
+			Message:    "Registration successful",
+		}
+
+		responseBytes, err := json.Marshal(response)
+		if err != nil {
+			log.Printf("Error marshaling registration response: %v", err)
+			return
+		}
+
+		stream.Write(responseBytes)
 		return
 	}
 
