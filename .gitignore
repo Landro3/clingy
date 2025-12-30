@@ -39,3 +39,4 @@ server.key
 .DS_Store
 config.json
 node_modules/
+test.sh
