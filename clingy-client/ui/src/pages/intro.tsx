@@ -16,9 +16,7 @@ export default function Intro() {
       <box justifyContent="center" alignItems="flex-start">
         <ascii-font font="tiny" text="clingy" />
         <text attributes={TextAttributes.DIM}>E2E Encrypted & AI-Powered Terminal Messaging</text>
-      </box>
-      <box marginTop={2} border={true} borderStyle="rounded">
-        <text>Get Started</text>
+        <text attributes={TextAttributes.DIM}>Make this load the config and if not exists then go there</text>
       </box>
     </box>
   );

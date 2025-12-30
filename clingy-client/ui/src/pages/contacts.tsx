@@ -11,9 +11,11 @@ import {
   getContacts,
 } from '../api/contacts';
 import { useMutation, useQuery } from '../hooks/api';
+import { useChat } from '../context/chat';
 
 export default function Contacts() {
   const { navigate } = useNavigation();
+  const { setChatUser } = useChat();
   const [mode, setMode] = useState<'create' | 'update' | 'delete' | null>(null);
   const [inputFocus, setInputFocus] = useState(0);
   const [username, setUsername] = useState('');
@@ -78,6 +80,12 @@ export default function Contacts() {
         setInputFocus(inputFocus + 1);
       }
 
+      return;
+    }
+
+    if (!mode && contacts[index] && name === 'return') {
+      setChatUser(contacts[index].username);
+      navigate(Pages.Chat);
       return;
     }
 
@@ -156,7 +164,12 @@ export default function Contacts() {
       {mode === 'delete' && (
         <text>Are you sure you want to remove {username} ({id})? (y / n)</text>
       )}
-      {!mode && <text attributes={TextAttributes.DIM}>esc to return to chat</text>}
+      {!mode && (
+        <box>
+          <text attributes={TextAttributes.DIM}>esc to return to chat</text>
+          <text attributes={TextAttributes.DIM}>enter to open chat</text>
+        </box>
+      )}
     </box>
   );
 }

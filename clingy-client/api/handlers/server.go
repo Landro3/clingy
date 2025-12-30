@@ -43,6 +43,11 @@ func (s *Server) Start(addr string) error {
 	s.registerRoute("GET", "/api/config/server", configHandler.GetServerConfig)
 	s.registerRoute("POST", "/api/config/server", configHandler.SetServerConfig)
 
+	// Chat
+	chatHandler := NewChatHandler(s.quicService, s.configService)
+	s.registerRoute("POST", "/api/chat", chatHandler.SendChatMessage)
+	s.registerRoute("GET", "/api/chat/stream", chatHandler.GetMessageStream)
+
 	// Health
 	s.registerRoute("GET", "/health", s.handleHealth)
 

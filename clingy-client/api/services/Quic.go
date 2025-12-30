@@ -25,12 +25,12 @@ type registrationResponse struct {
 }
 
 type ChatMessage struct {
-	To      string
-	From    string
-	Message string
+	To      string `json:"to"`
+	From    string `json:"from"`
+	Message string `json:"message"`
 }
 
-var messageChannel = make(chan ChatMessage, 100)
+var MessageChannel = make(chan ChatMessage, 100)
 
 type Quic struct {
 	conn *quic.Conn
@@ -39,7 +39,10 @@ type Quic struct {
 
 func NewQuic(config *Config) *Quic {
 	c := &Quic{}
-	c.Connect(config.ServerAddr)
+	err := c.Connect(config.ServerAddr)
+	if err != nil {
+		util.Log("Error Connecting...")
+	}
 	c.StartMessageListener()
 	return c
 }
@@ -85,17 +88,10 @@ func (c *Quic) Register(username string) (string, error) {
 	}
 	util.Log(fmt.Sprintf("📤 Sending registration message: %s", string(bytes)))
 
-	stream, err := c.conn.OpenStreamSync(context.Background())
+	stream, err := c.SendMessage(bytes)
 	if err != nil {
-		return "", fmt.Errorf("failed to open registration stream: %s", err)
+		return "", fmt.Errorf("failed to send registration response: %s", err)
 	}
-
-	bytesWritten, err := stream.Write(bytes)
-	if err != nil {
-		util.Log(fmt.Sprintf("❌ Failed to write to stream: %v", err))
-		return "", fmt.Errorf("failed to send registration message: %s", err)
-	}
-	util.Log(fmt.Sprintf("✅ Sent %d bytes to server", bytesWritten))
 
 	timeout := 5 * time.Second
 	deadline := time.Now().Add(timeout)
@@ -106,7 +102,6 @@ func (c *Quic) Register(username string) (string, error) {
 	util.Log("📥 Waiting for server response...")
 	n, err := stream.Read(buffer)
 	if err != nil {
-		util.Log(fmt.Sprintf("❌ Failed to read from stream: %v", err))
 		return "", fmt.Errorf("failed to read registration response: %s", err)
 	}
 	util.Log(fmt.Sprintf("✅ Received %d bytes from server", n))
@@ -114,15 +109,12 @@ func (c *Quic) Register(username string) (string, error) {
 
 	var response registrationResponse
 	if err := json.Unmarshal(buffer[:n], &response); err != nil {
-		util.Log(fmt.Sprintf("❌ Failed to parse JSON response: %v", err))
-		util.Log(fmt.Sprintf("📄 Attempting to parse: %s", string(buffer[:n])))
 		return "", fmt.Errorf("failed to parse registration response: %s", err)
 	}
 	util.Log(fmt.Sprintf("✅ Parsed response: Success=%t, AssignedID=%s, Username=%s, Message=%s",
 		response.Success, response.AssignedID, response.Username, response.Message))
 
 	if !response.Success {
-		util.Log(fmt.Sprintf("❌ Registration failed: %s", response.Message))
 		return "", fmt.Errorf("registration failed: %s", response.Message)
 	}
 
@@ -131,20 +123,19 @@ func (c *Quic) Register(username string) (string, error) {
 	return response.AssignedID, nil
 }
 
-// SendMessage we'll see what to do with this
-func (c *Quic) SendMessage(bytes []byte) error {
+func (c *Quic) SendMessage(bytes []byte) (*quic.Stream, error) {
 	stream, err := c.conn.OpenStreamSync(context.Background())
 	if err != nil {
-		return fmt.Errorf("failed to open stream:\n%s", err)
+		return nil, fmt.Errorf("failed to open stream:\n%s", err)
 	}
 
 	n, err := stream.Write(bytes)
 	if err != nil {
-		return fmt.Errorf("failed to send message:\n%s", err)
+		return nil, fmt.Errorf("failed to send message:\n%s", err)
 	}
 
 	util.Log(fmt.Sprintf("✅ Sent %d bytes", n))
-	return nil
+	return stream, nil
 }
 
 func (c *Quic) StartMessageListener() {
@@ -179,16 +170,14 @@ func handleIncomingStream(stream *quic.Stream) {
 		}
 
 		select {
-		case messageChannel <- msg:
+		case MessageChannel <- msg:
 			util.Log(fmt.Sprintf("📨 Received structured message from %s: %s", msg.From, msg.Message))
 		default:
 			util.Log("Message channel full, dropping message")
 		}
 	}
-
-	util.Log(fmt.Sprintf("Received response: %s", string(buffer[:n])))
 }
 
 func GetMessageChannel() <-chan ChatMessage {
-	return messageChannel
+	return MessageChannel
 }

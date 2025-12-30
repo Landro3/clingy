@@ -3,11 +3,15 @@ package main
 import (
 	"clingy-client/handlers"
 	"clingy-client/services"
+	"flag"
 	"log"
 )
 
 func main() {
-	log.Println("=== Clingy API Server ===")
+	log.Println("=== Clingy Client Server ===")
+
+	port := flag.String("port", "8888", "server port")
+	flag.Parse()
 
 	// Initialize services
 	log.Println("Initializing services...")
@@ -15,14 +19,10 @@ func main() {
 	contactService := services.NewContact(configService)
 	quicService := services.NewQuic(configService)
 
-	log.Printf("Config loaded - Username: %s, ServerAddr: %s",
-		configService.Username, configService.ServerAddr)
-	log.Printf("Loaded %d existing contacts", len(contactService.Contacts))
-
 	// Start HTTP server
 	server := handlers.NewServer(configService, contactService, quicService)
 
-	if err := server.Start(":8888"); err != nil {
+	if err := server.Start(":" + *port); err != nil {
 		log.Fatal("Failed to start server:", err)
 	}
 }

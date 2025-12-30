@@ -98,13 +98,12 @@ func handleStream(stream *quic.Stream, conn *quic.Conn) {
 
 	var regMsg registerMessage
 	if err := json.Unmarshal(buffer[:n], &regMsg); err == nil && regMsg.Username != "" {
-		// Server generates UUID
 		assignedID := generateUUID()
 
 		log.Printf("Registered\nUsername: %s\nAssigned ID: %s", regMsg.Username, assignedID)
-		connMap.Add(assignedID, conn)
+		// TODO: base this off of UUID
+		connMap.Add(regMsg.Username, conn)
 
-		// Send registration confirmation back to client
 		response := registrationResponse{
 			Success:    true,
 			AssignedID: assignedID,
@@ -119,12 +118,10 @@ func handleStream(stream *quic.Stream, conn *quic.Conn) {
 		}
 
 		stream.Write(responseBytes)
-		return
 	}
 
 	var chatMsg chatMessage
 	if err := json.Unmarshal(buffer[:n], &chatMsg); err == nil && chatMsg.To != "" {
-		log.Printf("Chat: %s", chatMsg.Message)
 		conn, exists := connMap.Get(chatMsg.To)
 		if exists {
 			stream, err := conn.OpenStreamSync(context.Background())
@@ -141,7 +138,6 @@ func handleStream(stream *quic.Stream, conn *quic.Conn) {
 
 			log.Printf("✅ Sent %d bytes to %s: %s", n, chatMsg.To, chatMsg.Message)
 		}
-		return
 	}
 
 	connMap.LogConnections()

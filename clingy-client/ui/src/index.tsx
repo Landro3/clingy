@@ -12,5 +12,5 @@ function App() {
 }
 
 const renderer = await createCliRenderer();
-// renderer.console.show();
+renderer.console.show();
 createRoot(renderer).render(<App />);

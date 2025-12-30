@@ -43,6 +43,6 @@ func (cm *ConnectionMap) LogConnections() {
 
 	log.Printf("Active connections (%d):", len(cm.connections))
 	for userID, conn := range cm.connections {
-		log.Printf("  %s -> %s", userID, (*conn).RemoteAddr())
+		log.Printf("  %s -> %s", userID, conn.RemoteAddr())
 	}
 }
