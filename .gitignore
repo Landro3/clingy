@@ -40,3 +40,5 @@ server.key
 config.json
 node_modules/
 test.sh
+client-1/
+client-2/

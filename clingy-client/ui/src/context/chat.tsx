@@ -1,18 +1,97 @@
-import { createContext, useContext, useState, type Dispatch, type PropsWithChildren, type SetStateAction } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, type Dispatch, type PropsWithChildren, type SetStateAction } from 'react';
+import { useMutation, useQuery } from '../hooks/api';
+import { sendChatMessage as sendChatMessageApi } from '../api/chat';
+import { getServerConfig, type ServerConfig } from '../api/config';
+
+type ChatMap = Record<string, { from: string; message: string }[]>
 
 interface ChatContextType {
   chatUser: string | null;
   setChatUser: Dispatch<SetStateAction<string | null>>;
+  chatMap: ChatMap;
+  sendChatMessage: (to: string, message: string) => Promise<void>;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export function ChatProvider({ children }: PropsWithChildren) {
   const [chatUser, setChatUser] = useState<string | null>(null);
+  const [chatMap, setChatMap] = useState<ChatMap>({});
+
+  const { mutate: sendChatMessageMutation } = useMutation(sendChatMessageApi);
+  const { data: serverConfig, /* loading: loadingServerConfig, refetch */ } = useQuery<ServerConfig>(getServerConfig);
+
+  const addMessageToMap = (otherUser: string, message: string, fromSelf: boolean) => {
+    if (!serverConfig) {
+      return;
+    }
+
+    setChatMap((prev) => {
+      if (!prev[otherUser]) {
+        prev[otherUser] = [];
+      }
+
+      prev[otherUser].push({
+        message,
+        from: fromSelf ? serverConfig.username : otherUser,
+      })
+
+      return { ...prev };
+    });
+  }
+
+  const sendChatMessage = async (to: string, message: string) => {
+    sendChatMessageMutation({ to, message })
+      .then(() => addMessageToMap(to, message, true));
+  };
+
+  useEffect(() => {
+    const controller = new AbortController();
+    (async () => {
+      try {
+        const response = await fetch(`${process.env.API_URL}/chat/stream`, {
+          headers: { "Accept": "text/event-stream" },
+          signal: controller.signal
+        });
+
+        if (!response.body) return;
+
+        let buffer = "";
+        for await (const chunk of response.body) {
+          buffer += new TextDecoder().decode(chunk);
+
+          const lines = buffer.split("\n\n");
+          buffer = lines.pop() || "";
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              const rawJson = line.replace("data: ", "").trim();
+              const { from, message } = JSON.parse(rawJson);
+              console.log('receiving')
+              console.log({ from, message });
+              addMessageToMap(from, message, false);
+            }
+          }
+        }
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return;
+        }
+
+        console.log('Probably timing out');
+        console.error(err);
+      }
+    })();
+
+
+    return () => controller.abort();
+  }, [addMessageToMap]);
 
   const value: ChatContextType = {
     chatUser,
     setChatUser,
+    chatMap,
+    sendChatMessage,
   };
 
   return (
