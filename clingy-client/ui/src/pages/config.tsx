@@ -16,7 +16,6 @@ export default function Config() {
   const { navigate } = useNavigation();
 
   const { data: serverConfig, loading: loadingServerConfig, refetch } = useQuery<ServerConfig>(getServerConfig);
-
   const { mutate: setServerConfig, loading: settingServerConfig } = useMutation(setServerConfigApi);
 
   const [focus, setFocus] = useState(0);
@@ -83,7 +82,7 @@ export default function Config() {
             />
           </box>
           <box flexDirection="row" alignItems="center">
-            <FocusTextBox text="Regsister" focused={focus === Focus.Register} />
+            <FocusTextBox text="Register" focused={focus === Focus.Register} />
             <text attributes={TextAttributes.DIM}>
               Current ID: {uniqueId}
             </text>

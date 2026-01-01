@@ -1,11 +1,9 @@
 import { useKeyboard } from '@opentui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Pages, useNavigation } from '../context/navigation';
-import { useMutation, useQuery } from '../hooks/api';
 import FocusTextBox from '../components/FocusTextBox';
 import { TextAttributes } from '@opentui/core';
 import { useChat } from '../context/chat';
-import { getServerConfig, type ServerConfig } from '../api/config';
 
 enum Focus {
   ChatBox,
@@ -21,8 +19,6 @@ export default function Chat() {
   const [focus, setFocus] = useState(0);
 
   const messages = chatMap[chatUser ?? ''] ?? [];
-
-  const { data: serverConfig, /* loading: loadingServerConfig, refetch */ } = useQuery<ServerConfig>(getServerConfig);
 
   useKeyboard((key) => {
     switch (key.name) {
@@ -51,16 +47,15 @@ export default function Chat() {
         {!messages.length && <text>No messages yet</text>}
         <box padding={1}>
           {messages.map((m, i) => {
-            const fromSelf = m.from === serverConfig?.username;
             return (
-              <box flexDirection="row" alignItems="center" justifyContent={fromSelf ? "flex-end" : "flex-start"} key={i}>
-                {!fromSelf && <text fg="red">-</text>}
+              <box flexDirection="row" alignItems="center" justifyContent={m.fromSelf ? "flex-end" : "flex-start"} key={i}>
+                {!m.fromSelf && <text fg="red">-</text>}
                 <box paddingLeft={1} paddingRight={1}>
                   <text>
                     {m.message}
                   </text>
                 </box>
-                {fromSelf && <text fg="blue">-</text>}
+                {m.fromSelf && <text fg="blue">-</text>}
               </box>
             )
           })}

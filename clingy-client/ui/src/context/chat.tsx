@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '../hooks/api';
 import { sendChatMessage as sendChatMessageApi } from '../api/chat';
 import { getServerConfig, type ServerConfig } from '../api/config';
 
-type ChatMap = Record<string, { from: string; message: string }[]>
+type ChatMap = Record<string, { from: string; message: string; fromSelf: boolean }[]>
 
 interface ChatContextType {
   chatUser: string | null;
@@ -34,6 +34,7 @@ export function ChatProvider({ children }: PropsWithChildren) {
       prev[otherUser].push({
         message,
         from: fromSelf ? serverConfig.username : otherUser,
+        fromSelf,
       })
 
       return { ...prev };
@@ -47,7 +48,7 @@ export function ChatProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const controller = new AbortController();
-    (async () => {
+    const connect = async () => {
       try {
         const response = await fetch(`${process.env.API_URL}/chat/stream`, {
           headers: { "Accept": "text/event-stream" },
@@ -67,8 +68,6 @@ export function ChatProvider({ children }: PropsWithChildren) {
             if (line.startsWith("data: ")) {
               const rawJson = line.replace("data: ", "").trim();
               const { from, message } = JSON.parse(rawJson);
-              console.log('receiving')
-              console.log({ from, message });
               addMessageToMap(from, message, false);
             }
           }
@@ -78,10 +77,17 @@ export function ChatProvider({ children }: PropsWithChildren) {
           return;
         }
 
-        console.log('Probably timing out');
+        if (err instanceof Error) {
+          console.error(err.name);
+          connect();
+          return;
+        }
+
         console.error(err);
       }
-    })();
+    };
+
+    connect();
 
 
     return () => controller.abort();
