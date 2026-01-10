@@ -2,29 +2,28 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"sync"
-
-	quic "github.com/quic-go/quic-go"
 )
 
 type ConnectionMap struct {
-	connections map[string]*quic.Conn
+	connections map[string]http.ResponseWriter
 	mutex       sync.RWMutex
 }
 
 func NewConnectionMap() *ConnectionMap {
 	return &ConnectionMap{
-		connections: make(map[string]*quic.Conn),
+		connections: make(map[string]http.ResponseWriter),
 	}
 }
 
-func (cm *ConnectionMap) Add(userID string, conn *quic.Conn) {
+func (cm *ConnectionMap) Add(userID string, conn http.ResponseWriter) {
 	cm.mutex.Lock()
 	defer cm.mutex.Unlock()
 	cm.connections[userID] = conn
 }
 
-func (cm *ConnectionMap) Get(userID string) (*quic.Conn, bool) {
+func (cm *ConnectionMap) Get(userID string) (http.ResponseWriter, bool) {
 	cm.mutex.RLock()
 	defer cm.mutex.RUnlock()
 	conn, exists := cm.connections[userID]
@@ -42,7 +41,7 @@ func (cm *ConnectionMap) LogConnections() {
 	defer cm.mutex.RUnlock()
 
 	log.Printf("Active connections (%d):", len(cm.connections))
-	for userID, conn := range cm.connections {
-		log.Printf("  %s -> %s", userID, conn.RemoteAddr())
+	for userID := range cm.connections {
+		log.Printf("  %s -> %s", userID, "connected")
 	}
 }
