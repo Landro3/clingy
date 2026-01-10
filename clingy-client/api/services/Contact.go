@@ -24,31 +24,28 @@ func (c ContactInfo) Description() string {
 }
 
 type Contact struct {
-	Contacts []ContactInfo
-	config   *Config
+	config *Config
 }
 
 func NewContact(config *Config) *Contact {
 	contact := &Contact{
-		Contacts: config.Contacts,
-		config:   config,
+		config: config,
 	}
 	return contact
 }
 
 func (c *Contact) AddContact(ci ContactInfo) {
-	c.Contacts = append(c.Contacts, ci)
+	c.config.Contacts = append(c.config.Contacts, ci)
 	c.saveToConfig()
 }
 
 func (c *Contact) saveToConfig() {
-	c.config.Contacts = c.Contacts
 	c.config.saveToFile()
 }
 
 func (c *Contact) ToListItems() []list.Item {
-	items := make([]list.Item, len(c.Contacts))
-	for i, contact := range c.Contacts {
+	items := make([]list.Item, len(c.config.Contacts))
+	for i, contact := range c.config.Contacts {
 		items[i] = contact
 	}
 	return items
@@ -62,9 +59,9 @@ func NewContactInfo(username, id string) ContactInfo {
 }
 
 func (c *Contact) RemoveContact(ID string) {
-	for i, item := range c.Contacts {
+	for i, item := range c.config.Contacts {
 		if item.ID == ID {
-			c.Contacts = append(c.Contacts[:i], c.Contacts[i+1:]...)
+			c.config.Contacts = append(c.config.Contacts[:i], c.config.Contacts[i+1:]...)
 			break
 		}
 	}
@@ -72,8 +69,8 @@ func (c *Contact) RemoveContact(ID string) {
 }
 
 func (c *Contact) UpdateContact(index int, ci ContactInfo) {
-	if index >= 0 && index < len(c.Contacts) {
-		c.Contacts[index] = ci
+	if index >= 0 && index < len(c.config.Contacts) {
+		c.config.Contacts[index] = ci
 		c.saveToConfig()
 	}
 }

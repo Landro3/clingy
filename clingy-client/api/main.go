@@ -17,10 +17,10 @@ func main() {
 	log.Println("Initializing services...")
 	configService := services.NewConfig()
 	contactService := services.NewContact(configService)
-	quicService := services.NewQuic(configService)
+	http3Service := services.NewHttp3(configService)
 
 	// Start HTTP server
-	server := handlers.NewServer(configService, contactService, quicService)
+	server := handlers.NewServer(configService, contactService, http3Service)
 
 	if err := server.Start(":" + *port); err != nil {
 		log.Fatal("Failed to start server:", err)

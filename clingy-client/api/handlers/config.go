@@ -9,16 +9,16 @@ import (
 
 type ConfigHandler struct {
 	configService *services.Config
-	quicService   *services.Quic
+	http3Service  *services.Http3
 }
 
 func NewConfigHandler(
 	configService *services.Config,
-	quicService *services.Quic,
+	http3Service *services.Http3,
 ) *ConfigHandler {
 	return &ConfigHandler{
 		configService: configService,
-		quicService:   quicService,
+		http3Service:  http3Service,
 	}
 }
 
@@ -43,6 +43,7 @@ func (h *ConfigHandler) GetServerConfig(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
+// TODO: do not register in this endpoint, make another endpoint
 func (h *ConfigHandler) SetServerConfig(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -62,7 +63,7 @@ func (h *ConfigHandler) SetServerConfig(w http.ResponseWriter, r *http.Request) 
 	config.Username = serverConfig.Username
 	config.ServerAddr = serverConfig.ServerAddr
 
-	assignedUUID, err := h.quicService.Register(config.Username)
+	assignedUUID, err := h.http3Service.Register(config.Username)
 	log.Printf("Assigned UUID: %v", assignedUUID)
 	if err != nil {
 		log.Printf("API: Failed to register with server: %v", err)

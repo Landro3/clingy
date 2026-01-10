@@ -10,18 +10,20 @@ import (
 
 type ContactHandler struct {
 	contactService *services.Contact
+	configService  *services.Config
 }
 
-func NewContactHandler(contactService *services.Contact) *ContactHandler {
+func NewContactHandler(contactService *services.Contact, configService *services.Config) *ContactHandler {
 	return &ContactHandler{
 		contactService: contactService,
+		configService:  configService,
 	}
 }
 
 func (h *ContactHandler) GetContacts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	log.Printf("API: GET /api/contacts - Fetching %d contacts", len(h.contactService.Contacts))
-	contacts := h.contactService.Contacts // TODO: change to read from file every time
+	log.Printf("API: GET /api/contacts - Fetching %d contacts", len(h.configService.Contacts))
+	contacts := h.configService.Contacts // TODO: read from file every time
 
 	if err := json.NewEncoder(w).Encode(contacts); err != nil {
 		log.Printf("API: Error encoding contacts: %v", err)
@@ -38,7 +40,7 @@ func (h *ContactHandler) CreateContact(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	index := slices.IndexFunc(h.contactService.Contacts, func(c services.ContactInfo) bool {
+	index := slices.IndexFunc(h.configService.Contacts, func(c services.ContactInfo) bool {
 		return c.ID == contact.ID
 	})
 	if index >= 0 {
@@ -49,7 +51,7 @@ func (h *ContactHandler) CreateContact(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("API: POST /api/contacts - Creating contact: %s (ID: %s)", contact.Username, contact.ID)
 	h.contactService.AddContact(contact)
-	log.Printf("API: Contact created successfully. Total contacts: %d", len(h.contactService.Contacts))
+	log.Printf("API: Contact created successfully. Total contacts: %d", len(h.configService.Contacts))
 
 	w.WriteHeader(http.StatusCreated)
 	if err := json.NewEncoder(w).Encode(contact); err != nil {
@@ -71,7 +73,7 @@ func (h *ContactHandler) UpdateContact(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("API: PUT /api/contacts - Updating contact: %s (ID: %s)", contact.Username, contact.ID)
-	index := slices.IndexFunc(h.contactService.Contacts, func(c services.ContactInfo) bool {
+	index := slices.IndexFunc(h.configService.Contacts, func(c services.ContactInfo) bool {
 		return c.ID == contact.CurrentID
 	})
 
@@ -104,7 +106,7 @@ func (h *ContactHandler) DeleteContact(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("API: DELETE /api/contacts - Deleting contact with ID: %s", id)
 	h.contactService.RemoveContact(id)
-	log.Printf("API: Contact deleted successfully. Total contacts: %d", len(h.contactService.Contacts))
+	log.Printf("API: Contact deleted successfully. Total contacts: %d", len(h.configService.Contacts))
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"message":"Contact deleted successfully"}`))

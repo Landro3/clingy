@@ -10,18 +10,18 @@ type Server struct {
 	server         *http.ServeMux
 	configService  *services.Config
 	contactService *services.Contact
-	quicService    *services.Quic
+	http3Service   *services.Http3
 }
 
 func NewServer(
 	configService *services.Config,
 	contactService *services.Contact,
-	quicService *services.Quic,
+	http3Service *services.Http3,
 ) *Server {
 	return &Server{
 		configService:  configService,
 		contactService: contactService,
-		quicService:    quicService,
+		http3Service:   http3Service,
 	}
 }
 
@@ -32,19 +32,19 @@ func (s *Server) Start(addr string) error {
 	log.Println("Endpoints:")
 
 	// Contacts
-	contactHandler := NewContactHandler(s.contactService)
+	contactHandler := NewContactHandler(s.contactService, s.configService)
 	s.registerRoute("GET", "/api/contacts", contactHandler.GetContacts)
 	s.registerRoute("POST", "/api/contacts", contactHandler.CreateContact)
 	s.registerRoute("PUT", "/api/contacts", contactHandler.UpdateContact)
 	s.registerRoute("DELETE", "/api/contacts", contactHandler.DeleteContact)
 
 	// Config
-	configHandler := NewConfigHandler(s.configService, s.quicService)
+	configHandler := NewConfigHandler(s.configService, s.http3Service)
 	s.registerRoute("GET", "/api/config/server", configHandler.GetServerConfig)
 	s.registerRoute("POST", "/api/config/server", configHandler.SetServerConfig)
 
 	// Chat
-	chatHandler := NewChatHandler(s.quicService, s.configService)
+	chatHandler := NewChatHandler(s.http3Service, s.configService)
 	s.registerRoute("POST", "/api/chat", chatHandler.SendChatMessage)
 	s.registerRoute("GET", "/api/chat/stream", chatHandler.GetMessageStream)
 
