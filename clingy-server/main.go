@@ -1,14 +1,12 @@
 package main
 
 import (
-	"context"
 	"crypto/rand"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"log"
-
-	quic "github.com/quic-go/quic-go"
+	"net/http"
 )
 
 var connMap *ConnectionMap
@@ -29,46 +27,52 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// tlsConfig := &tls.Config{
+	// 	MinVersion:   tls.VersionTLS13,
+	// 	Certificates: []tls.Certificate{cert},
+	// 	NextProtos:   []string{"h3"},
+	// }
+
 	tlsConfig := &tls.Config{
-		MinVersion:   tls.VersionTLS13,
+		MinVersion:   tls.VersionTLS12,
 		Certificates: []tls.Certificate{cert},
-		NextProtos:   []string{"clingy-v1"},
+		NextProtos:   []string{"h2", "http/1.1"},
 	}
 
-	listener, err := quic.ListenAddr(":8443", tlsConfig, nil)
-	if err != nil {
-		log.Fatal(err)
+	mux := http.NewServeMux()
+	mux.HandleFunc("POST /register", register)
+	mux.HandleFunc("POST /chat", chat)
+	// server := http3.Server{
+	// 	Handler:    mux,
+	// 	Addr:       "0.0.0.0:8443",
+	// 	TLSConfig:  http3.ConfigureTLSConfig(tlsConfig),
+	// 	QUICConfig: &quic.Config{},
+	// }
+	server := &http.Server{
+		Addr:      "0.0.0.0:8443",
+		Handler:   mux,
+		TLSConfig: tlsConfig,
 	}
-
-	log.Println("Server listening on :8443")
 
 	log.Println("Creating Connection Map")
 	connMap = NewConnectionMap()
 
-	for {
-		conn, err := listener.Accept(context.Background())
-		if err != nil {
-			log.Printf("Accept error: %v", err)
-			continue
-		}
-		go handleConnection(conn)
+	// err = server.ListenAndServe()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// 	return
+	// }
+	// log.Println("Server listening on :8443")
+
+	log.Println("Starting HTTP/2 server on :8443")
+	err = server.ListenAndServeTLS("", "") // Uses certificates from TLSConfig
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
-func handleConnection(conn *quic.Conn) {
-	defer conn.CloseWithError(0, "")
-
-	for {
-		stream, err := conn.AcceptStream(context.Background())
-		if err != nil {
-			return
-		}
-		go handleStream(stream, conn)
-	}
-}
-
-type registerMessage struct {
-	Username string
+type registerBody struct {
+	Username string `json:"username"`
 }
 
 type registrationResponse struct {
@@ -84,63 +88,77 @@ type chatMessage struct {
 	Message string
 }
 
-func handleStream(stream *quic.Stream, conn *quic.Conn) {
-	buffer := make([]byte, 1024)
-	n, err := stream.Read(buffer)
-	if err != nil {
-		if err.Error() == "EOF" {
-			log.Printf("Client closed stream normally")
-			return
-		}
-		log.Printf("Read error (%d bytes): %v", n, err)
+func register(w http.ResponseWriter, r *http.Request) {
+	assignedID := generateUUID()
+
+	var body registerBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
 
-	var regMsg registerMessage
-	if err := json.Unmarshal(buffer[:n], &regMsg); err == nil && regMsg.Username != "" {
-		assignedID := generateUUID()
+	log.Printf("Registered\nUsername: %s\nAssigned ID: %s", body.Username, assignedID)
 
-		log.Printf("Registered\nUsername: %s\nAssigned ID: %s", regMsg.Username, assignedID)
-		// TODO: base this off of UUID
-		connMap.Add(regMsg.Username, conn)
+	// Set SSE headers for streaming response
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
 
-		response := registrationResponse{
-			Success:    true,
-			AssignedID: assignedID,
-			Username:   regMsg.Username,
-			Message:    "Registration successful",
-		}
+	// Send registration response as SSE event
+	response := registrationResponse{
+		Success:    true,
+		AssignedID: assignedID,
+		Username:   body.Username,
+		Message:    "Registration successful",
+	}
 
-		responseBytes, err := json.Marshal(response)
+	responseBytes, err := json.Marshal(response)
+	if err != nil {
+		log.Printf("Error marshaling registration response: %v", err)
+		return
+	}
+
+	fmt.Fprintf(w, "data: %s\n\n", string(responseBytes))
+	if flusher, ok := w.(http.Flusher); ok {
+		flusher.Flush()
+	}
+
+	// TODO: change to UUID
+	connMap.Add(body.Username, w)
+	log.Printf("SSE connection established for user: %s", body.Username)
+
+	// Keep connection alive for incoming messages
+	<-r.Context().Done()
+
+	connMap.Remove(body.Username)
+	log.Printf("SSE connection closed for user: %s", body.Username)
+}
+
+func chat(w http.ResponseWriter, r *http.Request) {
+	var body chatMessage
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	writer, exists := connMap.Get(body.To)
+	if exists {
+		jsonBytes, _ := json.Marshal(body)
+		_, err := fmt.Fprintf(writer, "data: %s\n\n", string(jsonBytes))
 		if err != nil {
-			log.Printf("Error marshaling registration response: %v", err)
+			log.Printf("STREAM: Error writing to response: %v", err)
 			return
 		}
-
-		stream.Write(responseBytes)
-	}
-
-	var chatMsg chatMessage
-	if err := json.Unmarshal(buffer[:n], &chatMsg); err == nil && chatMsg.To != "" {
-		conn, exists := connMap.Get(chatMsg.To)
-		if exists {
-			stream, err := conn.OpenStreamSync(context.Background())
-			if err != nil {
-				log.Fatal(err)
-				return
-			}
-
-			bytes, _ := json.Marshal(chatMsg)
-			n, err := stream.Write(bytes)
-			if err != nil {
-				log.Printf("Failed to send message:\n%s", err)
-			}
-
-			log.Printf("✅ Sent %d bytes to %s: %s", n, chatMsg.To, chatMsg.Message)
+		if flusher, ok := writer.(http.Flusher); ok {
+			flusher.Flush()
 		}
+		log.Printf("✅ Sent message to %s", body.To)
+	} else {
+		log.Printf("User %s not connected", body.To)
 	}
+
+	w.Header().Set("Content-Type", "application/json")
 
 	connMap.LogConnections()
-
-	log.Printf("Message: %s", buffer[:n])
 }

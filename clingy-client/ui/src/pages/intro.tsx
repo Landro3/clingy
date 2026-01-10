@@ -8,10 +8,17 @@ import { useEffect } from 'react';
 export default function Intro() {
   const { navigate } = useNavigation();
 
-  const { data: serverConfig, loading: loadingServerConfig, refetch } = useQuery<ServerConfig>(getServerConfig);
+  const { data: serverConfig, loading: loadingServerConfig } = useQuery<ServerConfig>(getServerConfig);
   const { mutate: setServerConfig } = useMutation(setServerConfigApi);
 
+  useKeyboard((key) => {
+    if (key.name === 'return' && !loadingServerConfig) {
+      navigate(Pages.Config);
+    }
+  });
+
   // TODO: Modal on error here
+  // TODO: change to call to new register endpoint when file exists
   useEffect(() => {
     if (loadingServerConfig) return;
     if (serverConfig) {
@@ -21,11 +28,11 @@ export default function Intro() {
       }).then(() => navigate(Pages.Chat));
       return;
     }
-  
+
     if (!serverConfig && !loadingServerConfig) {
       navigate(Pages.Config);
     }
-  }, [serverConfig]);
+  }, [serverConfig, loadingServerConfig, navigate, setServerConfig]);
 
   return (
     <box alignItems="center" justifyContent="center" flexGrow={1}>

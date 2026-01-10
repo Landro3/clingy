@@ -10,16 +10,16 @@ import (
 )
 
 type ChatHandler struct {
-	quicService   *services.Quic
+	http3Service  *services.Http3
 	configService *services.Config
 }
 
 func NewChatHandler(
-	quicService *services.Quic,
+	http3Service *services.Http3,
 	configService *services.Config,
 ) *ChatHandler {
 	return &ChatHandler{
-		quicService:   quicService,
+		http3Service:  http3Service,
 		configService: configService,
 	}
 }
@@ -44,7 +44,14 @@ func (h *ChatHandler) SendChatMessage(w http.ResponseWriter, r *http.Request) {
 		From:    h.configService.Username,
 	}
 	msgBytes, _ := json.Marshal(chatMessage)
-	h.quicService.SendMessage(msgBytes)
+	err := h.http3Service.SendMessage(msgBytes)
+	if err != nil {
+		log.Printf("Error sending message: %v", err)
+		http.Error(w, "Failed to send message", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *ChatHandler) GetMessageStream(w http.ResponseWriter, r *http.Request) {
