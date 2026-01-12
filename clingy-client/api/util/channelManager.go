@@ -28,7 +28,7 @@ func (cm *ChannelManager[T]) GetChannel() (<-chan T, error) {
 func (cm *ChannelManager[T]) SendMessage(message T) {
 	select {
 	case cm.channel <- message:
-		Log(fmt.Sprintf("📨 Sent message:\n%v", message))
+		Log(fmt.Sprintf("📨 Pushing message to channel:\n%v", message))
 	default:
 		Log("Message channel full, dropping message")
 	}
