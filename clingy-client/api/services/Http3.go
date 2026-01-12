@@ -32,15 +32,14 @@ type ChatMessage struct {
 	Message string `json:"message"`
 }
 
-var MessageChannel = make(chan ChatMessage, 100)
-
 type Http3 struct {
 	client    *http.Client
 	sseCancel func()
 	config    *Config
+	sendMessage func(ChatMessage)
 }
 
-func NewHttp3(config *Config) *Http3 {
+func NewHttp3(config *Config, sendMessage func(ChatMessage)) *Http3 {
 	tlsConfig := &tls.Config{
 		MinVersion:         tls.VersionTLS13,
 		NextProtos:         []string{"h3"},
@@ -63,6 +62,7 @@ func NewHttp3(config *Config) *Http3 {
 	return &Http3{
 		client: client,
 		config: config,
+		sendMessage: sendMessage,
 	}
 }
 
@@ -141,12 +141,7 @@ func (h *Http3) establishSSE(resp *http.Response) {
 			// Try to parse as chat message
 			var chatMsg ChatMessage
 			if err := json.Unmarshal([]byte(data), &chatMsg); err == nil && chatMsg.From != "" {
-				select {
-				case MessageChannel <- chatMsg:
-					util.Log(fmt.Sprintf("📨 Received message from %s: %s", chatMsg.From, chatMsg.Message))
-				default:
-					util.Log("Message channel full, dropping message")
-				}
+				h.sendMessage(chatMsg)
 			} else {
 				// Log other events (like registration confirmation)
 				util.Log(fmt.Sprintf("📄 SSE event: %s", data))
@@ -167,6 +162,3 @@ func (h *Http3) establishSSE(resp *http.Response) {
 	util.Log("🔌 SSE connection closed")
 }
 
-func GetMessageChannel() <-chan ChatMessage {
-	return MessageChannel
-}
