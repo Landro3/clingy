@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/quic-go/quic-go"
@@ -38,9 +37,7 @@ var MessageChannel = make(chan ChatMessage, 100)
 type Http3 struct {
 	client    *http.Client
 	sseCancel func()
-	mu        sync.Mutex
 	config    *Config
-	username  string
 }
 
 func NewHttp3(config *Config) *Http3 {
@@ -70,10 +67,6 @@ func NewHttp3(config *Config) *Http3 {
 }
 
 func (h *Http3) Register(username string) (string, error) {
-	h.mu.Lock()
-	h.username = username
-	h.mu.Unlock()
-
 	util.Log(fmt.Sprintf("🔄 Starting HTTP/3 registration for user: %s", username))
 
 	message := registerMessage{Username: username}
@@ -129,7 +122,7 @@ func (h *Http3) SendMessage(bytes []byte) error {
 		return fmt.Errorf("chat message failed with status: %d", resp.StatusCode)
 	}
 
-	util.Log(fmt.Sprintf("✅ Chat message sent successfully"))
+	util.Log("✅ Chat message sent successfully")
 	return nil
 }
 
@@ -167,7 +160,7 @@ func (h *Http3) establishSSE(resp *http.Response) {
 		// Simple retry for H3_MESSAGE_ERROR
 		if strings.Contains(err.Error(), "H3_MESSAGE_ERROR") {
 			time.Sleep(5 * time.Second)
-			go h.Register(h.username)
+			go h.Register(h.config.Username)
 		}
 	}
 
