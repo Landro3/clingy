@@ -10,17 +10,20 @@ import (
 )
 
 type ChatHandler struct {
-	http3Service  *services.Http3
 	configService *services.Config
+	http3Service *services.Http3
+	messageChannel <-chan services.ChatMessage
 }
 
 func NewChatHandler(
-	http3Service *services.Http3,
 	configService *services.Config,
+	http3Service *services.Http3,
+	messageChannel <-chan services.ChatMessage,
 ) *ChatHandler {
 	return &ChatHandler{
-		http3Service:  http3Service,
 		configService: configService,
+		http3Service: http3Service,
+		messageChannel: messageChannel,
 	}
 }
 
@@ -66,11 +69,9 @@ func (h *ChatHandler) GetMessageStream(w http.ResponseWriter, r *http.Request) {
 		flusher.Flush()
 	}
 
-	messageChan := services.GetMessageChannel()
-
 	for {
 		select {
-		case msg, ok := <-messageChan:
+		case msg, ok := <-h.messageChannel:
 			if !ok {
 				util.Log("STREAM: Channel closed")
 				return

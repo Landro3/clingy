@@ -11,17 +11,20 @@ type Server struct {
 	configService  *services.Config
 	contactService *services.Contact
 	http3Service   *services.Http3
+	chatChannel 	 <-chan services.ChatMessage
 }
 
 func NewServer(
 	configService *services.Config,
 	contactService *services.Contact,
 	http3Service *services.Http3,
+	chatChannel <-chan services.ChatMessage,
 ) *Server {
 	return &Server{
 		configService:  configService,
 		contactService: contactService,
 		http3Service:   http3Service,
+		chatChannel: chatChannel,
 	}
 }
 
@@ -44,7 +47,7 @@ func (s *Server) Start(addr string) error {
 	s.registerRoute("POST", "/api/config/server", configHandler.SetServerConfig)
 
 	// Chat
-	chatHandler := NewChatHandler(s.http3Service, s.configService)
+	chatHandler := NewChatHandler(s.configService, s.http3Service, s.chatChannel)
 	s.registerRoute("POST", "/api/chat", chatHandler.SendChatMessage)
 	s.registerRoute("GET", "/api/chat/stream", chatHandler.GetMessageStream)
 
