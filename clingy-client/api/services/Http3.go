@@ -40,6 +40,7 @@ type Http3 struct {
 	sseCancel func()
 	mu        sync.Mutex
 	config    *Config
+	username  string
 }
 
 func NewHttp3(config *Config) *Http3 {
@@ -69,6 +70,10 @@ func NewHttp3(config *Config) *Http3 {
 }
 
 func (h *Http3) Register(username string) (string, error) {
+	h.mu.Lock()
+	h.username = username
+	h.mu.Unlock()
+
 	util.Log(fmt.Sprintf("🔄 Starting HTTP/3 registration for user: %s", username))
 
 	message := registerMessage{Username: username}
@@ -158,6 +163,12 @@ func (h *Http3) establishSSE(resp *http.Response) {
 
 	if err := scanner.Err(); err != nil {
 		util.Log(fmt.Sprintf("❌ SSE connection error: %v", err))
+
+		// Simple retry for H3_MESSAGE_ERROR
+		if strings.Contains(err.Error(), "H3_MESSAGE_ERROR") {
+			time.Sleep(5 * time.Second)
+			go h.Register(h.username)
+		}
 	}
 
 	util.Log("🔌 SSE connection closed")
