@@ -45,6 +45,8 @@ func (s *Server) Start(addr string) error {
 	configHandler := NewConfigHandler(s.configService, s.http3Service)
 	s.registerRoute("GET", "/api/config/server", configHandler.GetServerConfig)
 	s.registerRoute("POST", "/api/config/server", configHandler.SetServerConfig)
+	// TODO: move to new handler
+	s.registerRoute("POST", "/api/register", configHandler.RegisterWithServer)
 
 	// Chat
 	chatHandler := NewChatHandler(s.configService, s.http3Service, s.chatChannel)
@@ -62,7 +64,6 @@ func (s *Server) Start(addr string) error {
 
 func (s *Server) registerRoute(method string, route string, handler http.HandlerFunc) {
 	s.server.HandleFunc(method+" "+route, handler)
-	// Pad method to 6 characters for alignment (longest verb is DELETE = 6 chars)
 	paddedMethod := method
 	for len(paddedMethod) < 6 {
 		paddedMethod += " "

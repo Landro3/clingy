@@ -6,11 +6,13 @@ import Providers from './context/providers';
 function App() {
   return (
     <Providers>
-      <Pages />
+      <box backgroundColor="#222222" height="100%">
+        <Pages />
+      </box>
     </Providers>
   );
 }
 
 const renderer = await createCliRenderer();
-renderer.console.show();
+// renderer.console.show();
 createRoot(renderer).render(<App />);

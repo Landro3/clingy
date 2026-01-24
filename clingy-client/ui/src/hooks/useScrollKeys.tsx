@@ -1,7 +1,7 @@
 import { useKeyboard } from '@opentui/react';
 import { useState } from 'react';
 
-export default function useScrollKeys(numItems: number) {
+export default function useScrollKeys(numItems: number, ignore: boolean) {
   const [index, setIndex] = useState(0);
 
   const handleUp = () => {
@@ -21,6 +21,8 @@ export default function useScrollKeys(numItems: number) {
   };
 
   useKeyboard(({ name }) => {
+    if (ignore) return;
+
     switch (name) {
       case 'up':
       case 'k':
@@ -28,6 +30,7 @@ export default function useScrollKeys(numItems: number) {
         break;
       case 'down':
       case 'j':
+      case 'tab':
         handleDown();
         break;
     }
