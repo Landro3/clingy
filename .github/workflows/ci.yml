@@ -30,28 +30,10 @@ jobs:
       run: bunx tsc --noEmit
 
     - name: Lint clingy-client/api
-      uses: actions/setup-go@v5
+      uses: golangci/golangci-lint-action@v9
       with:
-        go-version: '1.24.5'
-    - name: Cache Go modules
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.cache/go-build
-          ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
-    - name: Download golangci-lint
-      run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.59.1
-    - name: Lint clingy-client/api
-      working-directory: ./clingy-client/api
-      run: |
-        go mod tidy
-        go vet ./...
-        go fmt ./...
-        git diff --exit-code
-        ~/go/bin/golangci-lint run
+        version: 'v2.6'
+        working-directory: ./clingy-client/api
 
   lint-server:
     name: Lint Server
@@ -75,17 +57,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
-    - name: Download golangci-lint
-      run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.59.1
-
-    - name: Lint clingy-server
-      working-directory: ./clingy-server
-      run: |
-        go mod tidy
-        go vet ./...
-        go fmt ./...
-        git diff --exit-code
-        ~/go/bin/golangci-lint run
+    - name: golangci-lint clingy-server
+      uses: golangci/golangci-lint-action@v9
+      with:
+        version: 'v2.6'
+        working-directory: ./clingy-server
 
   build-server:
     name: Build Server
