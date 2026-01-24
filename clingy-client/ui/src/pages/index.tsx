@@ -1,6 +1,6 @@
 import { useNavigation } from '../context/navigation';
 import { Pages as PageEnum } from '../context/navigation';
-import Chat from './chat';
+import Chat from './chat/chat';
 import Config from './config';
 import Contacts from './contacts';
 import Intro from './intro';

@@ -3,7 +3,8 @@ import { useMutation, useQuery } from '../hooks/api';
 import { sendChatMessage as sendChatMessageApi } from '../api/chat';
 import { getServerConfig, type ServerConfig } from '../api/config';
 
-type ChatMap = Record<string, { from: string; message: string; fromSelf: boolean }[]>
+export type Message = { from: string; text: string; fromSelf: boolean };
+export type ChatMap = Record<string, Message[]>
 
 interface ChatContextType {
   chatUser: string | null;
@@ -19,9 +20,9 @@ export function ChatProvider({ children }: PropsWithChildren) {
   const [chatMap, setChatMap] = useState<ChatMap>({});
 
   const { mutate: sendChatMessageMutation } = useMutation(sendChatMessageApi);
-  const { data: serverConfig, /* loading: loadingServerConfig, refetch */ } = useQuery<ServerConfig>(getServerConfig);
+  const { data: serverConfig /* loading: loadingServerConfig, refetch */ } = useQuery<ServerConfig>(getServerConfig);
 
-  const addMessageToMap = (otherUser: string, message: string, fromSelf: boolean) => {
+  const addMessageToMap = useCallback((otherUser: string, text: string, fromSelf: boolean) => {
     if (!serverConfig) {
       return;
     }
@@ -32,14 +33,14 @@ export function ChatProvider({ children }: PropsWithChildren) {
       }
 
       prev[otherUser].push({
-        message,
+        text,
         from: fromSelf ? serverConfig.username : otherUser,
         fromSelf,
-      })
+      });
 
       return { ...prev };
     });
-  }
+  }, [serverConfig]);
 
   const sendChatMessage = async (to: string, message: string) => {
     sendChatMessageMutation({ to, message })
@@ -51,22 +52,22 @@ export function ChatProvider({ children }: PropsWithChildren) {
     const connect = async () => {
       try {
         const response = await fetch(`${process.env.API_URL}/chat/stream`, {
-          headers: { "Accept": "text/event-stream" },
-          signal: controller.signal
+          headers: { 'Accept': 'text/event-stream' },
+          signal: controller.signal,
         });
 
         if (!response.body) return;
 
-        let buffer = "";
+        let buffer = '';
         for await (const chunk of response.body) {
           buffer += new TextDecoder().decode(chunk);
 
-          const lines = buffer.split("\n\n");
-          buffer = lines.pop() || "";
+          const lines = buffer.split('\n\n');
+          buffer = lines.pop() || '';
 
           for (const line of lines) {
-            if (line.startsWith("data: ")) {
-              const rawJson = line.replace("data: ", "").trim();
+            if (line.startsWith('data: ')) {
+              const rawJson = line.replace('data: ', '').trim();
               const { from, message } = JSON.parse(rawJson);
               addMessageToMap(from, message, false);
             }
@@ -88,7 +89,6 @@ export function ChatProvider({ children }: PropsWithChildren) {
     };
 
     connect();
-
 
     return () => controller.abort();
   }, [addMessageToMap]);
