@@ -1,10 +1,12 @@
 import { useKeyboard } from '@opentui/react';
 import { useState } from 'react';
-import { Pages, useNavigation } from '#/context/navigation';
 import { TextAttributes } from '@opentui/core';
 import { useChat } from '#/context/chat';
 import MessageBox from './message';
 import ArrowFocusText from '#/components/arrow-focus';
+import Modal from '#/components/modal';
+import Contacts from '../contacts';
+import Config from '../config';
 
 enum Focus {
   ChatBox,
@@ -13,46 +15,21 @@ enum Focus {
 }
 
 export default function Chat() {
-  const { navigate } = useNavigation();
   const { chatUser, chatMap, sendChatMessage } = useChat();
 
   const [message, setMessage] = useState('');
   const [focus, setFocus] = useState(0);
+  const [modal, setModal] = useState<'contacts' | 'config' | null>(null);
 
-  const messages = chatMap[chatUser ?? ''] ?? [
-    {
-      from: 'user2',
-      text: 'hello',
-      fromSelf: false,
-    },
-    {
-      from: 'user1',
-      text: 'hey what is up',
-      fromSelf: true,
-    },
-    {
-      from: 'user2',
-      text: 'oh not much',
-      fromSelf: false,
-    },
-    {
-      from: 'user2',
-      text: 'just checking styling',
-      fromSelf: false,
-    },
-    {
-      from: 'user1',
-      text: 'oh i know',
-      fromSelf: true,
-    },
-    {
-      from: 'user1',
-      text: 'he is never going to figure this out he has not artistic ability, just ask anyone',
-      fromSelf: true,
-    },
-  ];
+  const messages = chatMap[chatUser ?? ''] ?? [];
 
   useKeyboard((key) => {
+    if (modal && key.name === 'escape') {
+      setModal(null);
+    } else if (modal) {
+      return;
+    }
+
     switch (key.name) {
       case 'tab':
         if (focus >= 2) {
@@ -62,8 +39,8 @@ export default function Chat() {
         }
         break;
       case 'return':
-        if (focus === Focus.Contact) navigate(Pages.Contacts);
-        if (focus === Focus.Config) navigate(Pages.Config);
+        if (focus === Focus.Contact) setModal('contacts');
+        if (focus === Focus.Config) setModal('config');
         if (focus === Focus.ChatBox && !!message && !!chatUser) {
           sendChatMessage(chatUser, message).then(() => setMessage(''));
         }
@@ -74,12 +51,12 @@ export default function Chat() {
   return (
     <box>
       <box flexGrow={1} margin={1}>
-        <box>
-          <text>{chatUser ? `${chatUser}:server` : ''}</text>
+        <box marginBottom={1}>
+          {!!chatUser && <text>{chatUser}:uuid</text>}
           {!chatUser && <text>Select a user to chat with</text>}
-          {!messages.length && <text>No messages yet</text>}
         </box>
         <scrollbox>
+          {!messages.length && !!chatUser && <text>No messages yet</text>}
           {messages.map((m, i) => {
             return (
               <box
@@ -121,6 +98,16 @@ export default function Chat() {
           </box>
         </box>
       </box>
+      {modal === 'contacts' && (
+        <Modal title="Contacts">
+          <Contacts />
+        </Modal>
+      )}
+      {modal === 'config' && (
+        <Modal title="Config">
+          <Config />
+        </Modal>
+      )}
     </box>
   );
 }

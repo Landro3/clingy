@@ -91,6 +91,11 @@ export default function Contacts() {
       return;
     }
 
+    if (mode && ['create', 'update'].includes(mode) && (!username || !id) && name === 'return') {
+      clearMode()
+    }
+
+
     if (mode === 'create' && username && id && name === 'return') {
       createContact({ username, id })
         .then(clearMode)
@@ -118,7 +123,7 @@ export default function Contacts() {
 
   return (
     <box margin={1}>
-      <text>Contacts</text>
+      {/* <text marginBottom={1}>Contacts</text> */}
       {!loading && <text attributes={TextAttributes.DIM}>username - uuid</text>}
       <box marginBottom={1}>
         {loading && <text>Loading...</text>}
@@ -148,7 +153,7 @@ export default function Contacts() {
               />
             </box>
           </box>
-          <text attributes={TextAttributes.DIM}>enter to {mode === 'create' ? 'add' : 'edit'} user | esc to exit</text>
+          <text attributes={TextAttributes.DIM}>enter to {mode === 'create' ? 'add' : 'edit'} user</text>
         </box>
       )}
       {mode === 'delete' && (
@@ -156,10 +161,7 @@ export default function Contacts() {
       )}
       {!mode && (
         <box>
-          <text attributes={TextAttributes.DIM}>a-add | e-edit | r-remove</text>
-          <text attributes={TextAttributes.DIM}>
-            esc-return to chat | enter-open chat
-          </text>
+          <text attributes={TextAttributes.DIM}>a-add | e-edit | r-remove | enter-open chat</text>
         </box>
       )}
     </box>

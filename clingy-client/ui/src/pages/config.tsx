@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Pages, useNavigation } from '../context/navigation';
 import { type ServerConfig, getServerConfig, setServerConfig as setServerConfigApi } from '../api/config';
 import { useMutation, useQuery } from '../hooks/api';
-import FocusTextBox from '../components/FocusTextBox';
+import ArrowFocusText from '#/components/arrow-focus';
 
 enum Focus {
   Server,
@@ -60,12 +60,12 @@ export default function Config() {
   const loading = loadingServerConfig || settingServerConfig;
 
   return (
-    <box>
-      <text marginBottom={1}>Config</text>
+    <box margin={1}>
+      {/* <text marginBottom={1}>Config</text> */}
       {loading && <text>Loading...</text>}
       {!loading && (
         <box>
-          <box title="Clingy Server" style={{ border: true, width: 40, height: 3 }}>
+          <box title="Clingy Server" borderStyle="rounded" border width={40} height={3}>
             <input
               placeholder="Enter server address..."
               value={serverAddr}
@@ -73,7 +73,7 @@ export default function Config() {
               focused={focus === Focus.Server}
             />
           </box>
-          <box title="Username" style={{ border: true, width: 40, height: 3 }}>
+          <box title="Username" borderStyle="rounded" border width={40} height={3}>
             <input
               placeholder="Enter username..."
               value={username}
@@ -82,13 +82,10 @@ export default function Config() {
             />
           </box>
           <box flexDirection="row" alignItems="center">
-            <FocusTextBox text="Register" focused={focus === Focus.Register} />
+            <ArrowFocusText text="Register" focused={focus === Focus.Register} />
             <text attributes={TextAttributes.DIM}>
               Current ID: {uniqueId}
             </text>
-          </box>
-          <box>
-            <text attributes={TextAttributes.DIM}>esc to return to chat</text>
           </box>
         </box>
       )}
