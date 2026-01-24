@@ -92,9 +92,8 @@ export default function Contacts() {
     }
 
     if (mode && ['create', 'update'].includes(mode) && (!username || !id) && name === 'return') {
-      clearMode()
+      clearMode();
     }
-
 
     if (mode === 'create' && username && id && name === 'return') {
       createContact({ username, id })
