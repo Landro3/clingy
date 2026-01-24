@@ -43,7 +43,6 @@ func (h *ConfigHandler) GetServerConfig(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
-// TODO: do not register in this endpoint, make another endpoint
 func (h *ConfigHandler) SetServerConfig(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -76,7 +75,6 @@ func (h *ConfigHandler) SetServerConfig(w http.ResponseWriter, r *http.Request) 
 
 	log.Printf("API: Registration successful. UUID: %s", assignedUUID)
 
-	// Prepare response including the assigned UUID
 	response := struct {
 		Username   string `json:"username"`
 		ServerAddr string `json:"serverAddr"`
@@ -91,6 +89,21 @@ func (h *ConfigHandler) SetServerConfig(w http.ResponseWriter, r *http.Request) 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Printf("API: Error encoding server config response: %v", err)
 		http.Error(w, "Failed to encode server config", http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *ConfigHandler) RegisterWithServer(w http.ResponseWriter, r *http.Request) {
+	if h.configService.Username == "" {
+		http.Error(w, "No server config found", http.StatusBadRequest)
+		return 
+	}
+	
+	assignedUUID, err := h.http3Service.Register(h.configService.Username)
+	log.Printf("Assigned UUID: %v", assignedUUID)
+	if err != nil {
+		log.Printf("API: Failed to register with server: %v", err)
+		http.Error(w, "Failed to register with server", http.StatusInternalServerError)
 		return
 	}
 }
