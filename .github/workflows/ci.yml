@@ -147,7 +147,7 @@ jobs:
 
     - name: Build UI
       working-directory: ./clingy-client/ui
-      run: bun build src/index.tsx --outdir dist --target browser
+      run: bun build src/index.tsx --outdir dist --target bun
 
     - name: Upload UI build
       uses: actions/upload-artifact@v4
