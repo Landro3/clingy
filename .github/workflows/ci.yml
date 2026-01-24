@@ -5,8 +5,8 @@ on:
     branches: [ main, master ]
 
 jobs:
-  lint-opentui:
-    name: Lint OpenTUI
+  lint-client:
+    name: Lint Client
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -29,8 +29,32 @@ jobs:
       working-directory: ./clingy-client/ui
       run: bunx tsc --noEmit
 
-  lint-go:
-    name: Lint Go
+    - name: Lint clingy-client/api
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.24.5'
+    - name: Cache Go modules
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+    - name: Download golangci-lint
+      run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.59.1
+    - name: Lint clingy-client/api
+      working-directory: ./clingy-client/api
+      run: |
+        go mod tidy
+        go vet ./...
+        go fmt ./...
+        git diff --exit-code
+        ~/go/bin/golangci-lint run
+
+  lint-server:
+    name: Lint Server
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -63,17 +87,8 @@ jobs:
         git diff --exit-code
         ~/go/bin/golangci-lint run
 
-    - name: Lint clingy-client/api
-      working-directory: ./clingy-client/api
-      run: |
-        go mod tidy
-        go vet ./...
-        go fmt ./...
-        git diff --exit-code
-        ~/go/bin/golangci-lint run
-
-  build-matrix:
-    name: Build Binaries
+  build-server:
+    name: Build Server
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -111,46 +126,8 @@ jobs:
         if [ "$GOOS" = "windows" ]; then EXT=".exe"; fi
         go build -o clingy-server-${GOOS}-${GOARCH}${EXT} .
 
-    - name: Build clingy-client/api
-      working-directory: ./clingy-client/api
-      env:
-        GOOS: ${{ runner.os == 'ubuntu-latest' && 'linux' || runner.os == 'windows-latest' && 'windows' || 'darwin' }}
-        GOARCH: ${{ matrix.arch }}
-      run: |
-        EXT=""
-        if [ "$GOOS" = "windows" ]; then EXT=".exe"; fi
-        go build -o clingy-client-api-${GOOS}-${GOARCH}${EXT} .
-
-    - name: Upload binaries
+    - name: Upload server binaries
       uses: actions/upload-artifact@v4
       with:
-        name: clingy-binaries-${{ runner.os }}-${{ matrix.arch }}
-        path: |
-          clingy-server/clingy-server-*
-          clingy-client/api/clingy-client-api-*
-
-  build-ui:
-    name: Build UI
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Setup Bun
-      uses: oven-sh/setup-bun@v2
-      with:
-        bun-version: latest
-
-    - name: Install dependencies
-      working-directory: ./clingy-client/ui
-      run: bun install
-
-    - name: Build UI
-      working-directory: ./clingy-client/ui
-      run: bun build src/index.tsx --outdir dist --target bun
-
-    - name: Upload UI build
-      uses: actions/upload-artifact@v4
-      with:
-        name: clingy-ui-build
-        path: clingy-client/ui/dist/
+        name: clingy-server-${{ runner.os }}-${{ matrix.arch }}
+        path: clingy-server/clingy-server-*
