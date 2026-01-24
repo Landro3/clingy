@@ -21,8 +21,8 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@opentui/core": "^0.1.46",
-    "@opentui/react": "^0.1.46",
+    "@opentui/core": "^0.1.72",
+    "@opentui/react": "^0.1.72",
     "axios": "^1.13.2",
     "react": "^19.1.1"
   }
