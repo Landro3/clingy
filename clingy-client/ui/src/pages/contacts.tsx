@@ -12,10 +12,12 @@ import {
 } from '../api/contacts';
 import { useMutation, useQuery } from '../hooks/api';
 import { useChat } from '../context/chat';
+import ArrowFocusText from '#/components/arrow-focus';
 
 export default function Contacts() {
   const { navigate } = useNavigation();
   const { setChatUser } = useChat();
+
   const [mode, setMode] = useState<'create' | 'update' | 'delete' | null>(null);
   const [inputFocus, setInputFocus] = useState(0);
   const [username, setUsername] = useState('');
@@ -23,7 +25,7 @@ export default function Contacts() {
   const [updatingId, setUpdatingId] = useState('');
 
   const { data: contacts, loading: gettingContacts, refetch } = useQuery<Contact[]>(getContacts);
-  const index = useScrollKeys(contacts?.length ?? 0);
+  const index = useScrollKeys(contacts?.length ?? 0, !!mode);
 
   const { mutate: createContact, loading: creatingContact } = useMutation(createContactApi);
   const { mutate: updateContact, loading: updatingContact } = useMutation(updateContactApi);
@@ -44,7 +46,7 @@ export default function Contacts() {
       switch (name) {
         case 'a':
           setMode('create');
-          break;
+          return;
         case 'e':
           setMode('update');
           if (!contacts[index]) {
@@ -53,7 +55,7 @@ export default function Contacts() {
           setUsername(contacts[index].username);
           setUpdatingId(contacts[index].id);
           setId(contacts[index].id);
-          break;
+          return;
         case 'r':
           setMode('delete');
           if (!contacts[index]) {
@@ -61,16 +63,16 @@ export default function Contacts() {
           }
           setUsername(contacts[index].username);
           setId(contacts[index].id);
-          break;
+          return;
         case 'escape':
           navigate(Pages.Chat);
-          break;
+          return;
       }
-    } else {
-      if (name === 'escape') {
-        clearMode();
-        return;
-      }
+    }
+
+    if (!!mode && name === 'escape') {
+      clearMode();
+      return;
     }
 
     if ((mode === 'create' || mode === 'update') && name === 'tab') {
@@ -115,39 +117,30 @@ export default function Contacts() {
   const loading = gettingContacts || creatingContact || updatingContact || deletingContact;
 
   return (
-    <box>
+    <box margin={1}>
       <text>Contacts</text>
-      <box flexDirection="row" gap={3} marginBottom={1}>
-        <text>a - add</text>
-        <text>e - edit</text>
-        <text>r - remove</text>
-      </box>
-      <box marginLeft={1}>
+      {!loading && <text attributes={TextAttributes.DIM}>username - uuid</text>}
+      <box marginBottom={1}>
         {loading && <text>Loading...</text>}
         {!!contacts && !loading && contacts.map((c, i) => (
-          <box
-            border
-            borderStyle="rounded"
-            borderColor={(i === index && !mode) ? 'white' : 'transparent'}
-            paddingLeft={2}
+          <ArrowFocusText
+            focused={i === index && !['create', 'delete'].includes(mode ?? '')}
+            text={`${c.username} - ${c.id}`}
             key={c.id}
-          >
-            <text>{c.username}</text>
-            <text attributes={TextAttributes.DIM}>{c.id}</text>
-          </box>
+          />
         ))}
       </box>
       {(mode === 'create' || mode === 'update') && (
         <box>
           <box flexDirection="row">
-            <box title="Username" border height={3} flexGrow={1}>
+            <box title="Username" border borderStyle="rounded" height={3} flexGrow={1}>
               <input
                 value={username}
                 onInput={setUsername}
                 focused={inputFocus === 0}
               />
             </box>
-            <box title="UUID" border height={3} flexGrow={1}>
+            <box title="UUID" border borderStyle="rounded" height={3} flexGrow={1}>
               <input
                 value={id}
                 onInput={setId}
@@ -155,10 +148,7 @@ export default function Contacts() {
               />
             </box>
           </box>
-          <box>
-            <text attributes={TextAttributes.DIM}>Enter to {mode === 'create' ? 'add' : 'edit'} user</text>
-            <text attributes={TextAttributes.DIM}>esc to exit</text>
-          </box>
+          <text attributes={TextAttributes.DIM}>enter to {mode === 'create' ? 'add' : 'edit'} user | esc to exit</text>
         </box>
       )}
       {mode === 'delete' && (
@@ -166,8 +156,10 @@ export default function Contacts() {
       )}
       {!mode && (
         <box>
-          <text attributes={TextAttributes.DIM}>esc to return to chat</text>
-          <text attributes={TextAttributes.DIM}>enter to open chat</text>
+          <text attributes={TextAttributes.DIM}>a-add | e-edit | r-remove</text>
+          <text attributes={TextAttributes.DIM}>
+            esc-return to chat | enter-open chat
+          </text>
         </box>
       )}
     </box>
