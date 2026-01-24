@@ -5,8 +5,8 @@ on:
     branches: [ main, master ]
 
 jobs:
-  eslint:
-    name: Lint UI
+  lint-opentui:
+    name: Lint OpenTUI
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
