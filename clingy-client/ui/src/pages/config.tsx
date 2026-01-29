@@ -1,7 +1,6 @@
 import { TextAttributes } from '@opentui/core';
 import { useKeyboard } from '@opentui/react';
 import { useEffect, useState } from 'react';
-import { Pages, useNavigation } from '../context/navigation';
 import { type ServerConfig, getServerConfig, setServerConfig as setServerConfigApi } from '../api/config';
 import { useMutation, useQuery } from '../hooks/api';
 import ArrowFocusText from '#/components/arrow-focus';
@@ -12,9 +11,11 @@ enum Focus {
   Register,
 }
 
-export default function Config() {
-  const { navigate } = useNavigation();
+interface ConfigProps {
+  handleClose: () => void;
+}
 
+export default function Config({ handleClose }: ConfigProps) {
   const { data: serverConfig, loading: loadingServerConfig, refetch } = useQuery<ServerConfig>(getServerConfig);
   const { mutate: setServerConfig, loading: settingServerConfig } = useMutation(setServerConfigApi);
 
@@ -33,6 +34,11 @@ export default function Config() {
   }, [serverConfig]);
 
   useKeyboard(({ name }) => {
+    if (name === 'escape') {
+      handleClose();
+      return;
+    }
+
     if (name === 'tab') {
       if (focus >= Focus.Register) {
         setFocus(0);
@@ -45,13 +51,8 @@ export default function Config() {
 
     if (name === 'return' && focus === Focus.Register) {
       setServerConfig({ serverAddr, username })
-        .then(refetch);
-
-      return;
-    }
-
-    if (name === 'escape') {
-      navigate(Pages.Chat);
+        .then(refetch)
+        .then(handleClose);
 
       return;
     }
@@ -61,10 +62,10 @@ export default function Config() {
 
   return (
     <box margin={1}>
-      {/* <text marginBottom={1}>Config</text> */}
       {loading && <text>Loading...</text>}
       {!loading && (
         <box>
+          <text>TODO: Connection explanation and also feedback on register attempt before closing modal</text>
           <box title="Clingy Server" borderStyle="rounded" border width={40} height={3}>
             <input
               placeholder="Enter server address..."
