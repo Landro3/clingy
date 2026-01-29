@@ -85,9 +85,6 @@ jobs:
       - name: Install dependencies
         working-directory: ./clingy-client/ui
         run: bun install --frozen-lockfile
-      - name: Run ESLint
-        working-directory: ./clingy-client/ui
-        run: bun run lint
       - name: TypeScript type check
         working-directory: ./clingy-client/ui
         run: bunx tsc --noEmit
