@@ -88,12 +88,6 @@ jobs:
       - name: TypeScript type check
         working-directory: ./clingy-client/ui
         run: bunx tsc --noEmit
-      - name: Verify app starts (dry run)
-        working-directory: ./clingy-client/ui
-        run: |
-          # Verify the app can start by checking if it compiles without errors
-          # We use timeout to prevent it from actually running the TUI
-          timeout 2s bun run src/index.tsx || true
   build-clingy-api:
     name: Build Clingy API 
     runs-on: ${{ matrix.os }}
