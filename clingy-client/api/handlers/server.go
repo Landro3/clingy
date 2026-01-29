@@ -11,7 +11,7 @@ type Server struct {
 	configService  *services.Config
 	contactService *services.Contact
 	http3Service   *services.Http3
-	chatChannel 	 <-chan services.ChatMessage
+	chatChannel    <-chan services.ChatMessage
 }
 
 func NewServer(
@@ -24,7 +24,7 @@ func NewServer(
 		configService:  configService,
 		contactService: contactService,
 		http3Service:   http3Service,
-		chatChannel: chatChannel,
+		chatChannel:    chatChannel,
 	}
 }
 

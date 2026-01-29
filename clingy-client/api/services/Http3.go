@@ -33,9 +33,8 @@ type ChatMessage struct {
 }
 
 type Http3 struct {
-	client    *http.Client
-	sseCancel func()
-	config    *Config
+	client      *http.Client
+	config      *Config
 	sendMessage func(ChatMessage)
 }
 
@@ -60,8 +59,8 @@ func NewHttp3(config *Config, sendMessage func(ChatMessage)) *Http3 {
 	}
 
 	return &Http3{
-		client: client,
-		config: config,
+		client:      client,
+		config:      config,
 		sendMessage: sendMessage,
 	}
 }
@@ -171,4 +170,3 @@ func (h *Http3) establishSSE(resp *http.Response) {
 
 	util.Log("🔌 SSE connection closed")
 }
-

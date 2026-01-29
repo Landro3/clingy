@@ -1,18 +1,14 @@
 package services
 
 import (
+	"clingy-client/util"
 	"fmt"
-
-	"github.com/charmbracelet/bubbles/list"
 )
 
 type ContactInfo struct {
-	Username string `json:"username"`
-	ID       string `json:"id"`
-}
-
-func (c ContactInfo) FilterValue() string {
-	return c.Username
+	Username string        `json:"username"`
+	ID       string        `json:"uniqueId"`
+	Contacts []ContactInfo `json:"contacts"`
 }
 
 func (c ContactInfo) Title() string {
@@ -20,7 +16,7 @@ func (c ContactInfo) Title() string {
 }
 
 func (c ContactInfo) Description() string {
-	return fmt.Sprintf("%s", c.ID)
+	return c.ID
 }
 
 type Contact struct {
@@ -63,7 +59,7 @@ func (c *Contact) RemoveContact(ID string) {
 	c.saveToConfig()
 }
 
-func (c *Contact) UpdateContact(index int, ci ContactInfo) {
+func (c Contact) UpdateContact(index int, ci ContactInfo) {
 	if index >= 0 && index < len(c.config.Contacts) {
 		c.config.Contacts[index] = ci
 		c.saveToConfig()
