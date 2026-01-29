@@ -116,7 +116,12 @@ func (h *Http3) SendMessage(bytes []byte) error {
 	if err != nil {
 		return fmt.Errorf("failed to send chat message: %s", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			util.Log(fmt.Sprintf("error closing response body: %s", err))
+		}
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("chat message failed with status: %d", resp.StatusCode)
@@ -127,7 +132,12 @@ func (h *Http3) SendMessage(bytes []byte) error {
 }
 
 func (h *Http3) establishSSE(resp *http.Response) {
-	defer resp.Body.Close()
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			util.Log(fmt.Sprintf("error closing response body: %s", err))
+		}
+	}()
 
 	util.Log("🔗 Setting up SSE stream")
 

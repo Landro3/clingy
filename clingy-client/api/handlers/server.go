@@ -75,5 +75,8 @@ func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
 	log.Printf("API: GET /health - Health check requested")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"status":"healthy"}`))
+	_, err := w.Write([]byte(`{"status":"healthy"}`))
+	if err != nil {
+		log.Printf("Error writing response: %v", err)
+	}
 }

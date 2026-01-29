@@ -39,16 +39,11 @@ func (c *Contact) AddContact(ci ContactInfo) {
 	c.saveToConfig()
 }
 
-func (c *Contact) saveToConfig() {
-	c.config.saveToFile()
-}
-
-func (c *Contact) ToListItems() []list.Item {
-	items := make([]list.Item, len(c.config.Contacts))
-	for i, contact := range c.config.Contacts {
-		items[i] = contact
+func (c Contact) saveToConfig() {
+	err := c.config.saveToFile()
+	if err != nil {
+		util.Log(fmt.Sprintf("error saving config: %s", err))
 	}
-	return items
 }
 
 func NewContactInfo(username, id string) ContactInfo {
