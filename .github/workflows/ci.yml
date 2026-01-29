@@ -94,6 +94,7 @@ jobs:
 
     - name: Build clingy-server
       working-directory: ./clingy-server
+      shell: bash
       env:
         GOOS: ${{ runner.os == 'ubuntu-latest' && 'linux' || runner.os == 'windows-latest' && 'windows' || 'darwin' }}
         GOARCH: ${{ matrix.arch }}
