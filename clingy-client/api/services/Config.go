@@ -14,7 +14,10 @@ type Config struct {
 
 func NewConfig() *Config {
 	config := &Config{}
-	config.loadFromFile()
+	err := config.loadFromFile()
+	if err != nil {
+		util.Log(fmt.Sprintf("error loading config: %s", err))
+	}
 	return config
 }
 
@@ -22,7 +25,10 @@ func (c *Config) UpdateConfig(config *Config) {
 	c.ServerAddr = config.ServerAddr
 	c.Username = config.Username
 	c.UniqueID = config.UniqueID
-	c.saveToFile()
+	err := c.saveToFile()
+	if err != nil {
+		util.Log(fmt.Sprintf("error saving config: %s", err))
+	}
 }
 
 func (c *Config) loadFromFile() error {

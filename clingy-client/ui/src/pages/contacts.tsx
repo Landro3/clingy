@@ -2,7 +2,7 @@ import { TextAttributes } from '@opentui/core';
 import { useState } from 'react';
 import useScrollKeys from '../hooks/useScrollKeys';
 import { useKeyboard } from '@opentui/react';
-import { Pages, useNavigation } from '../context/navigation';
+import { Pages } from '../context/navigation';
 import {
   type Contact,
   createContact as createContactApi,
@@ -14,8 +14,11 @@ import { useMutation, useQuery } from '../hooks/api';
 import { useChat } from '../context/chat';
 import ArrowFocusText from '#/components/arrow-focus';
 
-export default function Contacts() {
-  const { navigate } = useNavigation();
+interface ContactsProps {
+  handleClose: () => void;
+}
+
+export default function Contacts({ handleClose }: ContactsProps) {
   const { setChatUser } = useChat();
 
   const [mode, setMode] = useState<'create' | 'update' | 'delete' | null>(null);
@@ -65,7 +68,7 @@ export default function Contacts() {
           setId(contacts[index].id);
           return;
         case 'escape':
-          navigate(Pages.Chat);
+          handleClose();
           return;
       }
     }
@@ -87,7 +90,7 @@ export default function Contacts() {
 
     if (!mode && contacts[index] && name === 'return') {
       setChatUser(contacts[index].username);
-      navigate(Pages.Chat);
+      handleClose();
       return;
     }
 
@@ -152,7 +155,7 @@ export default function Contacts() {
               />
             </box>
           </box>
-          <text attributes={TextAttributes.DIM}>enter to {mode === 'create' ? 'add' : 'edit'} user</text>
+          <text attributes={TextAttributes.DIM}>enter to {mode === 'create' ? 'add' : 'edit'} user | esc-cancel</text>
         </box>
       )}
       {mode === 'delete' && (
@@ -160,7 +163,7 @@ export default function Contacts() {
       )}
       {!mode && (
         <box>
-          <text attributes={TextAttributes.DIM}>a-add | e-edit | r-remove | enter-open chat</text>
+          <text attributes={TextAttributes.DIM}>a-add | e-edit | r-remove | enter-open chat | esc-close</text>
         </box>
       )}
     </box>

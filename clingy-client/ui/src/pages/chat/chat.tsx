@@ -23,10 +23,10 @@ export default function Chat() {
 
   const messages = chatMap[chatUser ?? ''] ?? [];
 
+  const handleClose = () => setModal(null);
+
   useKeyboard((key) => {
-    if (modal && key.name === 'escape') {
-      setModal(null);
-    } else if (modal) {
+    if (modal) {
       return;
     }
 
@@ -51,8 +51,12 @@ export default function Chat() {
   return (
     <box>
       <box flexGrow={1} margin={1}>
-        <box marginBottom={1}>
-          {!!chatUser && <text>{chatUser}:uuid</text>}
+        <box marginBottom={1} flexDirection="row">
+          {!!chatUser && (
+            <box border={['bottom']} borderColor="#ff00ff">
+              <text>{chatUser}:uuid</text>
+            </box>
+          )}
           {!chatUser && <text>Select a user to chat with</text>}
         </box>
         <scrollbox>
@@ -82,6 +86,7 @@ export default function Chat() {
             focusedBackgroundColor="black"
             value={message}
             onInput={setMessage}
+            cursorColor="#ff00ff"
             flexGrow={1}
           />
           <box flexDirection="row">
@@ -100,12 +105,12 @@ export default function Chat() {
       </box>
       {modal === 'contacts' && (
         <Modal title="Contacts">
-          <Contacts />
+          <Contacts handleClose={handleClose} />
         </Modal>
       )}
       {modal === 'config' && (
         <Modal title="Config">
-          <Config />
+          <Config handleClose={handleClose} />
         </Modal>
       )}
     </box>

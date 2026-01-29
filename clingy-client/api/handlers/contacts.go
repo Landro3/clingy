@@ -109,5 +109,8 @@ func (h *ContactHandler) DeleteContact(w http.ResponseWriter, r *http.Request) {
 	log.Printf("API: Contact deleted successfully. Total contacts: %d", len(h.configService.Contacts))
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"message":"Contact deleted successfully"}`))
+	_, err := w.Write([]byte(`{"message":"Contact deleted successfully"}`))
+	if err != nil {
+		log.Printf("Error writing response: %v", err)
+	}
 }
