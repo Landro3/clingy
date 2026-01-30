@@ -45,3 +45,4 @@ client-2/
 clingy-client/build/clingy
 clingy-client/build/clingy-ui
 clingy-client/build/clingy-api
+*.log

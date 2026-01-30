@@ -35,17 +35,23 @@ func main() {
 		log.Fatalf("Failed to write UI binary: %v", err)
 	}
 
+	apiLogFile, err := os.Create("api.log")
+	if err != nil {
+		log.Fatalf("Failed to create API log file: %v", err)
+	}
+	defer apiLogFile.Close()
+
 	log.Println("Starting API server...")
 	api := exec.Command(apiPath, "-port", "8888")
-	api.Stdout = os.Stdout
-	api.Stderr = os.Stderr
+	api.Stdout = apiLogFile
+	api.Stderr = apiLogFile
 
 	if err := api.Start(); err != nil {
 		log.Fatalf("Failed to start API: %v", err)
 	}
 	defer api.Process.Kill()
 
-	os.Setenv("API_URL", "http://localhost:8888")
+	os.Setenv("API_URL", "http://localhost:8888/api")
 
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
