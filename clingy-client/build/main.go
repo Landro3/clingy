@@ -25,8 +25,8 @@ func main() {
 	}
 	defer os.RemoveAll(dir)
 
-	apiPath := filepath.Join(dir, "api")
-	uiPath := filepath.Join(dir, "ui")
+	apiPath := filepath.Join(dir, "..", "api")
+	uiPath := filepath.Join(dir, "..", "ui")
 
 	if err := os.WriteFile(apiPath, apiBin, 0755); err != nil {
 		log.Fatalf("Failed to write API binary: %v", err)
