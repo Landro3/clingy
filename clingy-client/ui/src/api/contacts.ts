@@ -1,7 +1,7 @@
 import api from '.';
 
 export interface Contact {
-  id: string;
+  uniqueId: string;
   username: string;
 }
 
