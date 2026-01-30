@@ -15,7 +15,7 @@ interface NavigationContextType {
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
 export function NavigationProvider({ children }: PropsWithChildren) {
-  const [currentPage, setCurrentPage] = useState<Pages>(Pages.Chat);
+  const [currentPage, setCurrentPage] = useState<Pages>(Pages.Intro);
 
   const navigate = (page: Pages) => {
     setCurrentPage(page);
