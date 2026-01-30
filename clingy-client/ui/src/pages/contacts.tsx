@@ -2,7 +2,6 @@ import { TextAttributes } from '@opentui/core';
 import { useState } from 'react';
 import useScrollKeys from '../hooks/useScrollKeys';
 import { useKeyboard } from '@opentui/react';
-import { Pages } from '../context/navigation';
 import {
   type Contact,
   createContact as createContactApi,
@@ -24,7 +23,7 @@ export default function Contacts({ handleClose }: ContactsProps) {
   const [mode, setMode] = useState<'create' | 'update' | 'delete' | null>(null);
   const [inputFocus, setInputFocus] = useState(0);
   const [username, setUsername] = useState('');
-  const [id, setId] = useState('');
+  const [uniqueId, setUniqueId] = useState('');
   const [updatingId, setUpdatingId] = useState('');
 
   const { data: contacts, loading: gettingContacts, refetch } = useQuery<Contact[]>(getContacts);
@@ -40,7 +39,7 @@ export default function Contacts({ handleClose }: ContactsProps) {
     const clearMode = () => {
       setMode(null);
       setUsername('');
-      setId('');
+      setUniqueId('');
       setUpdatingId('');
       setInputFocus(0);
     };
@@ -56,8 +55,8 @@ export default function Contacts({ handleClose }: ContactsProps) {
             return;
           }
           setUsername(contacts[index].username);
-          setUpdatingId(contacts[index].id);
-          setId(contacts[index].id);
+          setUpdatingId(contacts[index].uniqueId);
+          setUniqueId(contacts[index].uniqueId);
           return;
         case 'r':
           setMode('delete');
@@ -65,7 +64,7 @@ export default function Contacts({ handleClose }: ContactsProps) {
             return;
           }
           setUsername(contacts[index].username);
-          setId(contacts[index].id);
+          setUniqueId(contacts[index].uniqueId);
           return;
         case 'escape':
           handleClose();
@@ -94,29 +93,30 @@ export default function Contacts({ handleClose }: ContactsProps) {
       return;
     }
 
-    if (mode && ['create', 'update'].includes(mode) && (!username || !id) && name === 'return') {
+    if (mode && ['create', 'update'].includes(mode) && (!username || !uniqueId) && name === 'return') {
       clearMode();
+      return;
     }
 
-    if (mode === 'create' && username && id && name === 'return') {
-      createContact({ username, id })
+    if (mode === 'create' && username && uniqueId && name === 'return') {
+      createContact({ username, uniqueId })
         .then(clearMode)
         .then(refetch);
     }
 
-    if (mode === 'update' && username && id && updatingId && name === 'return') {
-      updateContact({ username, id, currentId: updatingId })
+    if (mode === 'update' && username && uniqueId && updatingId && name === 'return') {
+      updateContact({ username, uniqueId, currentId: updatingId })
         .then(clearMode)
         .then(refetch);
     }
 
-    if (mode === 'delete' && id && name === 'y') {
-      deleteContact(id)
+    if (mode === 'delete' && uniqueId && name === 'y') {
+      deleteContact(uniqueId)
         .then(clearMode)
         .then(refetch);
     }
 
-    if (mode === 'delete' && id && name === 'n') {
+    if (mode === 'delete' && uniqueId && name === 'n') {
       clearMode();
     }
   });
@@ -125,15 +125,14 @@ export default function Contacts({ handleClose }: ContactsProps) {
 
   return (
     <box margin={1}>
-      {/* <text marginBottom={1}>Contacts</text> */}
       {!loading && <text attributes={TextAttributes.DIM}>username - uuid</text>}
       <box marginBottom={1}>
         {loading && <text>Loading...</text>}
         {!!contacts && !loading && contacts.map((c, i) => (
           <ArrowFocusText
-            focused={i === index && !['create', 'delete'].includes(mode ?? '')}
-            text={`${c.username} - ${c.id}`}
-            key={c.id}
+            focused={i === index && mode !== 'create'}
+            text={`${c.username} - ${c.uniqueId}`}
+            key={c.uniqueId}
           />
         ))}
       </box>
@@ -149,8 +148,8 @@ export default function Contacts({ handleClose }: ContactsProps) {
             </box>
             <box title="UUID" border borderStyle="rounded" height={3} flexGrow={1}>
               <input
-                value={id}
-                onInput={setId}
+                value={uniqueId}
+                onInput={setUniqueId}
                 focused={inputFocus === 1}
               />
             </box>
@@ -159,7 +158,7 @@ export default function Contacts({ handleClose }: ContactsProps) {
         </box>
       )}
       {mode === 'delete' && (
-        <text>Are you sure you want to remove {username} ({id})? (y / n)</text>
+        <text>Are you sure you want to remove {username} ({uniqueId})? (y / n)</text>
       )}
       {!mode && (
         <box>
