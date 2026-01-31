@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type Dispatch, type PropsWithChildren, type SetStateAction } from 'react';
-import { useMutation, useQuery } from '../hooks/api';
+import { useMutation } from '../hooks/api';
 import { sendChatMessage as sendChatMessageApi } from '../api/chat';
-import { getServerConfig, type ServerConfig } from '../api/config';
+import { useServerConfig } from '../context/server-config';
 
 export type Message = { from: string; text: string; fromSelf: boolean };
 export type ChatMap = Record<string, Message[]>
@@ -20,7 +20,7 @@ export function ChatProvider({ children }: PropsWithChildren) {
   const [chatMap, setChatMap] = useState<ChatMap>({});
 
   const { mutate: sendChatMessageMutation } = useMutation(sendChatMessageApi);
-  const { data: serverConfig /* loading: loadingServerConfig, refetch */ } = useQuery<ServerConfig>(getServerConfig);
+  const { serverConfig } = useServerConfig();
 
   const addMessageToMap = useCallback((otherUser: string, text: string, fromSelf: boolean) => {
     if (!serverConfig) {

@@ -1,8 +1,7 @@
 import { TextAttributes } from '@opentui/core';
 import { useKeyboard } from '@opentui/react';
 import { useEffect, useState } from 'react';
-import { type ServerConfig, getServerConfig, setServerConfig as setServerConfigApi } from '../api/config';
-import { useMutation, useQuery } from '../hooks/api';
+import { useServerConfig } from '../context/server-config';
 import ArrowFocusText from '#/components/arrow-focus';
 
 enum Focus {
@@ -16,8 +15,7 @@ interface ConfigProps {
 }
 
 export default function Config({ handleClose }: ConfigProps) {
-  const { data: serverConfig, loading: loadingServerConfig, refetch } = useQuery<ServerConfig>(getServerConfig);
-  const { mutate: setServerConfig, loading: settingServerConfig } = useMutation(setServerConfigApi);
+  const { serverConfig, loading: loadingServerConfig, updateConfig, updating } = useServerConfig();
 
   const [focus, setFocus] = useState(0);
   const [serverAddr, setServerAddr] = useState('');
@@ -50,19 +48,19 @@ export default function Config({ handleClose }: ConfigProps) {
     }
 
     if (name === 'return' && focus === Focus.Register) {
-      setServerConfig({ serverAddr, username })
-        .then(refetch)
+      updateConfig({ serverAddr, username })
         .then(handleClose);
 
       return;
     }
   });
 
-  const loading = loadingServerConfig || settingServerConfig;
+  const loading = loadingServerConfig;
 
   return (
     <box margin={1}>
       {loading && <text>Loading...</text>}
+      {updating && <text>Updating...</text>}
       {!loading && (
         <box>
           <text>TODO: Connection explanation and also feedback on register attempt before closing modal</text>

@@ -1,14 +1,15 @@
 import { TextAttributes } from '@opentui/core';
 import { useKeyboard } from '@opentui/react';
 import { Pages, useNavigation } from '../context/navigation';
-import { type ServerConfig, getServerConfig, registerWithServer as registerWithServerApi } from '../api/config';
-import { useMutation, useQuery } from '../hooks/api';
+import { registerWithServer as registerWithServerApi } from '../api/config';
+import { useMutation } from '../hooks/api';
+import { useServerConfig } from '../context/server-config';
 import { useEffect } from 'react';
 
 export default function Intro() {
   const { navigate } = useNavigation();
 
-  const { data: serverConfig, loading: loadingServerConfig } = useQuery<ServerConfig>(getServerConfig);
+  const { serverConfig, loading: loadingServerConfig } = useServerConfig();
   const { mutate: registerWithServer } = useMutation(registerWithServerApi);
 
   useKeyboard((key) => {
