@@ -67,12 +67,9 @@ func main() {
 		log.Fatalf("Failed to start UI: %v", err)
 	}
 
-	go func() {
-		<-sigChan
-		log.Println("\nShutting down...")
-		ui.Process.Kill()
-	}()
-
 	ui.Wait()
+	<-sigChan
+	log.Println("\nShutting down...")
+	ui.Process.Kill()
 	log.Println("Goodbye!")
 }
