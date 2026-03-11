@@ -4,7 +4,6 @@ import (
 	"clingy-server/util"
 	"crypto/tls"
 	"encoding/json"
-	"fmt"
 	"github.com/quic-go/quic-go"
 	"github.com/quic-go/quic-go/http3"
 	"log"
@@ -87,7 +86,7 @@ func (cs *ClingyServer) register(w http.ResponseWriter, r *http.Request) {
 		Message:    "Registration successful",
 	}
 
-	if err := cs.flushSSEMessage(w, response); err != nil {
+	if err := util.FlushSSEMessage(w, response); err != nil {
 		log.Printf("Error sending registration response: %v", err)
 		return
 	}
@@ -112,34 +111,16 @@ func (cs *ClingyServer) chat(w http.ResponseWriter, r *http.Request) {
 
 	writer, exists := cs.connMap.Get(body.To)
 	if exists {
-		if err := cs.flushSSEMessage(writer, body); err != nil {
+		if err := util.FlushSSEMessage(writer, body); err != nil {
 			log.Printf("STREAM: Error sending chat message: %v", err)
 			return
 		}
-		log.Printf("✅ Sent message to %s", body.To)
+		log.Printf("Sent message to %s", body.To)
 	} else {
 		log.Printf("User %s not connected", body.To)
 	}
 
 	cs.connMap.LogConnections()
-}
-
-func (cs *ClingyServer) flushSSEMessage(w http.ResponseWriter, data interface{}) error {
-	jsonBytes, err := json.Marshal(data)
-	if err != nil {
-		return fmt.Errorf("error marshaling data: %v", err)
-	}
-
-	_, err = fmt.Fprintf(w, "data: %s\n\n", string(jsonBytes))
-	if err != nil {
-		return fmt.Errorf("error writing to response: %v", err)
-	}
-
-	if flusher, ok := w.(http.Flusher); ok {
-		flusher.Flush()
-	}
-
-	return nil
 }
 
 func (cs *ClingyServer) startHttp2Server() {
