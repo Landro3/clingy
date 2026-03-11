@@ -55,8 +55,6 @@ func StartClingyServer(serverType ServerType) {
 	cs.mux.HandleFunc("POST /register", cs.register)
 	cs.mux.HandleFunc("POST /chat", cs.chat)
 
-
-
 	if serverType == Http2 {
 		cs.startHttp2Server()
 	} else {
