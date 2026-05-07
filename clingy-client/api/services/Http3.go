@@ -55,7 +55,6 @@ func NewHttp3(config *Config, sendMessage func(ChatMessage)) *Http3 {
 
 	client := &http.Client{
 		Transport: transport,
-		Timeout:   30 * time.Second,
 	}
 
 	return &Http3{

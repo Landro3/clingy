@@ -124,7 +124,7 @@ func (cs *ClingyServer) chat(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cs *ClingyServer) startHttp2Server() {
-	cert, err := tls.LoadX509KeyPair("services/server.crt", "services/server.key")
+	cert, err := tls.LoadX509KeyPair(cs.certFile, cs.keyFile)
 	if err != nil {
 		log.Fatal("Error loading HTTP2 cert")
 		log.Fatal(err)
