@@ -14,7 +14,7 @@ export default function Intro() {
 
   useKeyboard((key) => {
     if (key.name === 'return' && !loadingServerConfig) {
-      navigate(Pages.Config);
+      navigate(Pages.Chat);
     }
   });
 
@@ -24,12 +24,12 @@ export default function Intro() {
     if (serverConfig) {
       registerWithServer({})
         .then(() => navigate(Pages.Chat))
-        .catch(() => navigate(Pages.Config));
+        .catch(() => navigate(Pages.Chat));
       return;
     }
 
     if (!serverConfig && !loadingServerConfig) {
-      navigate(Pages.Config);
+      navigate(Pages.Chat);
     }
   }, [serverConfig, loadingServerConfig, navigate, registerWithServer]);
 

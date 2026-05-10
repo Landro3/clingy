@@ -32,7 +32,6 @@ go.work.sum
 # .vscode/
 
 C4 Diagrams/
-clingy-client/clingy-client
 clingy-client/debug.log
 server.crt
 server.key
@@ -45,4 +44,5 @@ client-2/
 clingy-client/build/clingy
 clingy-client/build/clingy-ui
 clingy-client/build/clingy-api
+clingy-server/build/clingy-server
 *.log

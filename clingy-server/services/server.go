@@ -47,8 +47,8 @@ func StartClingyServer(serverType ServerType) {
 		serverType: serverType,
 		mux: http.NewServeMux(),
 		connMap: NewConnectionMap(),
-		certFile: "services/server.crt",
-		keyFile: "services/server.key",
+		certFile: "./server.crt",
+		keyFile: "./server.key",
 	}
 
 	cs.mux.HandleFunc("POST /register", cs.register)
