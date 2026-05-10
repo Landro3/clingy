@@ -15,7 +15,7 @@ Self-hosted, end-to-end encrypted (soon) messaging from your terminal
 ### Build
 
 ```sh
-# Build TUI client binary - 
+# Build TUI client binary
 ./clingy-client/build/build.sh
 
 # Build remote server
