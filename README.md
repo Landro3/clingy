@@ -57,7 +57,7 @@ Select a user in the contacts modal to open the messages
 
 ## Architecture
 
-**Relay server (`clingy-server`)** — Go HTTP server. Holds one long-lived SSE connection per registered user and routes messages between them. Stateless aside from the in-memory connection map; no message persistence. Currently the server operates off of HTTP/3 but there is work in progress for setting HTTP/2 with a cli flag.
+**Relay server (`clingy-server`)** — Go HTTP/3 (QUIC) server. Holds one long-lived SSE connection per registered user and routes messages between them. Stateless aside from the in-memory connection map; no message persistence.
 
 **Client API daemon (`clingy-client/api`)** — Go process running locally alongside the TUI. Owns the connection to the relay, manages local config and contacts, and exposes a small REST API on localhost. Separated the API at this layer with the intent of setting up other connections to send messages through this API, e.g. MCP or new UI.
 

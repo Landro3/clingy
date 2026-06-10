@@ -27,38 +27,25 @@ type chatMessage struct {
 	Message string
 }
 
-type ServerType int
-
-const (
-	Http2 ServerType = iota
-	Http3
-)
-
 type ClingyServer struct {
-	serverType ServerType
-	mux        *http.ServeMux
-	connMap    *ConnectionMap
-	certFile	 string
-	keyFile    string
+	mux      *http.ServeMux
+	connMap  *ConnectionMap
+	certFile string
+	keyFile  string
 }
 
-func StartClingyServer(serverType ServerType) {
+func StartClingyServer() {
 	cs := &ClingyServer{
-		serverType: serverType,
-		mux: http.NewServeMux(),
-		connMap: NewConnectionMap(),
+		mux:      http.NewServeMux(),
+		connMap:  NewConnectionMap(),
 		certFile: "./server.crt",
-		keyFile: "./server.key",
+		keyFile:  "./server.key",
 	}
 
 	cs.mux.HandleFunc("POST /register", cs.register)
 	cs.mux.HandleFunc("POST /chat", cs.chat)
 
-	if serverType == Http2 {
-		cs.startHttp2Server()
-	} else {
-		cs.startHttp3Server()
-	}
+	cs.startHttp3Server()
 }
 
 func (cs *ClingyServer) register(w http.ResponseWriter, r *http.Request) {
@@ -127,30 +114,7 @@ func (cs *ClingyServer) chat(w http.ResponseWriter, r *http.Request) {
 	cs.connMap.LogConnections()
 }
 
-func (cs *ClingyServer) startHttp2Server() {
-	cert, err := tls.LoadX509KeyPair(cs.certFile, cs.keyFile)
-	if err != nil {
-		log.Fatal("Error loading HTTP2 cert")
-		log.Fatal(err)
-	}
-
-	tlsConfig := &tls.Config{
-		MinVersion:   tls.VersionTLS12,
-		Certificates: []tls.Certificate{cert},
-		NextProtos:   []string{"h2", "http/1.1"},
-	}
-
-	server := &http.Server{
-		Handler: cs.mux,
-		Addr: "localhost:8443",
-		TLSConfig: tlsConfig,
-	}
-
-	log.Printf("HTTP2 server listening at %s", server.Addr)
-	server.ListenAndServe()
-}
-
-func (cs*ClingyServer) startHttp3Server() {
+func (cs *ClingyServer) startHttp3Server() {
 	cert, err := tls.LoadX509KeyPair(cs.certFile, cs.keyFile)
 	if err != nil {
 		log.Fatal("Error loading HTTP3 cert")
