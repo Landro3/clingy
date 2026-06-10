@@ -113,13 +113,17 @@ func (cs *ClingyServer) chat(w http.ResponseWriter, r *http.Request) {
 	if exists {
 		if err := util.FlushSSEMessage(writer, body); err != nil {
 			log.Printf("STREAM: Error sending chat message: %v", err)
+			http.Error(w, "Failed to send", http.StatusInternalServerError)
 			return
 		}
 		log.Printf("Sent message to %s", body.To)
 	} else {
 		log.Printf("User %s not connected", body.To)
+		http.Error(w, "User not connected", http.StatusNotFound)
+		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	cs.connMap.LogConnections()
 }
 

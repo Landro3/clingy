@@ -3,6 +3,8 @@ package services
 import (
 	"clingy-client/util"
 	"fmt"
+	"os"
+	"path/filepath"
 )
 
 type Config struct {
@@ -10,11 +12,18 @@ type Config struct {
 	ServerAddr string        `json:"serverAddr"`
 	UniqueID   string        `json:"uniqueId"`
 	Contacts   []ContactInfo `json:"contacts"`
+
+	configPath string
 }
 
 func NewConfig() *Config {
-	config := &Config{}
-	err := config.loadFromFile()
+	configPath := "./config.json"
+	exe, err := os.Executable()
+	if err == nil {
+		configPath = filepath.Join(filepath.Dir(exe), "config.json")
+	}
+	config := &Config{configPath: configPath}
+	err = config.loadFromFile()
 	if err != nil {
 		util.Log(fmt.Sprintf("error loading config: %s", err))
 	}
@@ -32,7 +41,7 @@ func (c *Config) UpdateConfig(config *Config) {
 }
 
 func (c *Config) loadFromFile() error {
-	err := util.LoadJSONFile("./config.json", c)
+	err := util.LoadJSONFile(c.configPath, c)
 	if err != nil {
 		c.Username = ""
 		c.ServerAddr = ""
@@ -48,7 +57,7 @@ func (c *Config) loadFromFile() error {
 }
 
 func (c *Config) saveToFile() error {
-	err := util.SaveToJSONFile("./config.json", c)
+	err := util.SaveToJSONFile(c.configPath, c)
 	if err != nil {
 		util.Log(fmt.Sprintf("error saving config: %s", err))
 	}

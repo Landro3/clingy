@@ -37,7 +37,7 @@ export default function Intro() {
     <box alignItems="center" justifyContent="center" flexGrow={1} height={30}>
       <box justifyContent="center" alignItems="flex-start">
         <ascii-font font="tiny" text="clingy" />
-        <text attributes={TextAttributes.DIM}>E2E Encrypted & AI-Powered Terminal Messaging</text>
+        <text attributes={TextAttributes.DIM}>E2E Encrypted (soon) & AI-Powered (soon again) Terminal Messaging (sorry)</text>
         <text attributes={TextAttributes.DIM}>connecting to server...</text>
       </box>
     </box>

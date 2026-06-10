@@ -16,7 +16,7 @@ Self-hosted, end-to-end encrypted (soon) messaging from your terminal
 
 ```sh
 # Build TUI client binary
-./clingy-client/build/build.sh
+./clingy-client/build/build.sh (add -p <port> to set local ui/api communication, defaults to 8888)
 
 # Build remote server
 ./clingy-server/build/build.sh
@@ -26,12 +26,12 @@ cd clingy-server && openssl req -x509 -newkey rsa:4096 -keyout server.key -out s
 ```
 
 ### Run the relay server
-From a network reachable by clients
+From a network reachable by the clients
 ```sh
-./clingy-server/clingy-server
+./clingy-server
 ```
 
-The server currently runs on HTTP/3 (QUIC) and holds an SSE stream open per registered user for inbound message delivery.
+The server currently runs on HTTP/3 (QUIC) and holds an SSE stream open per registered user for inbound message delivery. Choosing protocol for communication is a feature to implement.
 
 ### Start the TUI client
 ```sh
@@ -57,15 +57,16 @@ Select a user in the contacts modal to open the messages
 
 ## Architecture
 
-<!-- diagram here -->
-
-There are three distinct parts to the clingy architecture
-
 **Relay server (`clingy-server`)** — Go HTTP server. Holds one long-lived SSE connection per registered user and routes messages between them. Stateless aside from the in-memory connection map; no message persistence. Currently the server operates off of HTTP/3 but there is work in progress for setting HTTP/2 with a cli flag.
 
 **Client API daemon (`clingy-client/api`)** — Go process running locally alongside the TUI. Owns the connection to the relay, manages local config and contacts, and exposes a small REST API on localhost. Separated the API at this layer with the intent of setting up other connections to send messages through this API, e.g. MCP or new UI.
 
 **TUI (`clingy-client/ui`)** — Built on [OpenTUI](https://github.com/sst/opentui). Talks only to the local API daemon over HTTP/SSE — never to the relay directly. 
+
+### Development
+Start clingy-server: `go run . # /clingy-server`
+Start clingy-client API: `go run . # /clingy-client/api`
+Start clingy-client TUI: `npm run dev # /clingy-client/ui`
 
 ### Message flow
 
@@ -77,7 +78,7 @@ There are three distinct parts to the clingy architecture
 
 ## Config
 
-Daemon-side config (managed by `services/Config.go`):
+Saved in local `config.json`
 
 ```json
 {
@@ -98,5 +99,8 @@ TUI-side env:
 
 ## Status
 
-Early development. Known gaps: no message persistence, no auth beyond username claim, E2E encryption advertised on the intro screen but not yet implemented, server CLI flags are stubbed (`TODO`s in `clingy-server/main.go`).
+Clingy is currently in early development. The following are features that I plan on implementing: 
+- E2E encryption 
+- authentication 
+- message persistence
 
