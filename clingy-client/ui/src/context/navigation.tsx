@@ -3,8 +3,6 @@ import { createContext, useContext, useState, type PropsWithChildren } from 'rea
 export enum Pages {
   Intro,
   Chat,
-  Contacts,
-  Config,
 }
 
 interface NavigationContextType {

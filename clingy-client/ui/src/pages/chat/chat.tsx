@@ -7,6 +7,7 @@ import ArrowFocusText from '#/components/arrow-focus';
 import Modal from '#/components/modal';
 import Contacts from '../contacts';
 import Config from '../config';
+import { useServerConfig } from '#/context/server-config';
 
 enum Focus {
   ChatBox,
@@ -16,6 +17,7 @@ enum Focus {
 
 export default function Chat() {
   const { chatUser, chatMap, sendChatMessage } = useChat();
+  const { serverConfig } = useServerConfig();
 
   const [message, setMessage] = useState('');
   const [focus, setFocus] = useState(0);
@@ -57,7 +59,8 @@ export default function Chat() {
               <text>{chatUser}:uuid</text>
             </box>
           )}
-          {!chatUser && <text>Select a user to chat with</text>}
+          {!serverConfig?.serverAddr && <text>Configure server connection</text>}
+          {!chatUser && !!serverConfig?.serverAddr && <text>Select a user to chat with</text>}
         </box>
         <scrollbox>
           {!messages.length && !!chatUser && <text>No messages yet</text>}

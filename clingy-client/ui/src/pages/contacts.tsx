@@ -125,9 +125,10 @@ export default function Contacts({ handleClose }: ContactsProps) {
 
   return (
     <box margin={1}>
-      {!loading && <text attributes={TextAttributes.DIM}>username - uuid</text>}
+      {!loading && <text attributes={TextAttributes.DIM} marginBottom={1}>username - uuid</text>}
       <box marginBottom={1}>
         {loading && <text>Loading...</text>}
+        {!contacts?.length && !loading && <text>Add contacts</text>}
         {!!contacts && !loading && contacts.map((c, i) => (
           <ArrowFocusText
             focused={i === index && mode !== 'create'}

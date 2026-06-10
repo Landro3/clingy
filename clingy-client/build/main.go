@@ -2,6 +2,8 @@ package main
 
 import (
 	_ "embed"
+	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -16,7 +18,12 @@ var apiBin []byte
 //go:embed clingy-ui
 var uiBin []byte
 
+var defaultPort = "8888"
+
 func main() {
+	port := flag.String("port", defaultPort, "API server port")
+	flag.Parse()
+
 	log.Println("=== Clingy Client ===")
 
 	dir, err := os.MkdirTemp("", "clingy-*")
@@ -25,8 +32,8 @@ func main() {
 	}
 	defer os.RemoveAll(dir)
 
-	apiPath := filepath.Join(dir, "..", "api")
-	uiPath := filepath.Join(dir, "..", "ui")
+	apiPath := filepath.Join(dir, "api")
+	uiPath := filepath.Join(dir, "ui")
 
 	if err := os.WriteFile(apiPath, apiBin, 0755); err != nil {
 		log.Fatalf("Failed to write API binary: %v", err)
@@ -35,14 +42,20 @@ func main() {
 		log.Fatalf("Failed to write UI binary: %v", err)
 	}
 
-	apiLogFile, err := os.Create("api.log")
+	logPath := "api.log"
+	exe, err := os.Executable()
+	if err == nil {
+		logPath = filepath.Join(filepath.Dir(exe), "api.log")
+	}
+
+	apiLogFile, err := os.Create(logPath)
 	if err != nil {
 		log.Fatalf("Failed to create API log file: %v", err)
 	}
 	defer apiLogFile.Close()
 
 	log.Println("Starting API server...")
-	api := exec.Command(apiPath, "-port", "8888")
+	api := exec.Command(apiPath, "-port", *port)
 	api.Stdout = apiLogFile
 	api.Stderr = apiLogFile
 
@@ -51,7 +64,7 @@ func main() {
 	}
 	defer api.Process.Kill()
 
-	os.Setenv("API_URL", "http://localhost:8888/api")
+	os.Setenv("API_URL", fmt.Sprintf("http://localhost:%s/api", *port))
 
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
@@ -67,9 +80,7 @@ func main() {
 		log.Fatalf("Failed to start UI: %v", err)
 	}
 
-	ui.Wait()
 	<-sigChan
 	log.Println("\nShutting down...")
-	ui.Process.Kill()
 	log.Println("Goodbye!")
 }
