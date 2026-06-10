@@ -1,7 +1,11 @@
 # clingy
 Self-hosted, end-to-end encrypted (soon) messaging from your terminal
 
-<img width="400" height="267" alt="Screen Recording 2026-06-10 at 8 27 59 AM" src="https://github.com/user-attachments/assets/2d38ebee-ae53-4686-af74-3072f47695aa" />
+<div align="center">
+  <img width="800" height="535" alt="Screen Recording 2026-06-10 at 8 27 59 AM" src="https://github.com/user-attachments/assets/057aa801-ee94-4a33-b194-68fc38f3e821" />
+</div>
+
+
 
 ---
 
